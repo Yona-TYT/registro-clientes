@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Servicios al Cliente</title>
+
+		<link rel="icon" href="resources/img/icono.png" type="image/png"sizes="50x50">
+		<! Aquí definimos los Scrit js para esta página -->
+		<script src="resources/js/auto-pantalla.js"></script>
+		<script src="resources/js/crear-tables.js"></script>
+		<script src="resources/js/save_date.js"></script>
+		<script src="resources/js/main.js"></script>
+		<script src="resources/js/menus.js"></script>
+
+		<script src="resources/js/basic_calc.js"></script>
+		<script src="resources/js/export-cvs.js"></script>
+		<script src="resources/js/inmport-cvs.js"></script>
+
+		<script src="resources/js/gestion-servicios.js"></script>
+		<script src="resources/js/registro-pagos.js"></script>
+		<script src="resources/js/historial.js"></script>
+		<script src="resources/js/gestion-cliente.js"></script>
+
+		<script src="resources/js/demo.js"></script>
+
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>-->
+		<!--<script src="vendors/PapaParse-5.0.2/papaparse.min.js"></script> -->
+
+		<! Fin del js -->
+		<! Aquí definimos los estilo CSS para esta página -->
+		<link rel="stylesheet" href="resources/css/main.css"></link>
+		<link rel="stylesheet" href="resources/css/basic-class.css"></link>
+
+		<link rel="stylesheet" href="resources/css/auto-pantalla.css"></link>
+
+		<! Fin del CSS -->
+	</head>
+	<body onLoad="init();" onselectstart="return false;" >
+		<section class="menu_style">
+
+
+			<div class="input_style_hidden">Boton para actualizaciones: 
+				<button class="mask_style" type="button" id="butt_actu" onclick="butt_actu_test();">Actualizar</button>
+			</div>
+
+
+			<h1 class="input_style_td">Gestion de Servicios</h1>
+
+			<div class="input_style_hidden" id="allmenu">
+				<div class="cajas_style">
+					<button class="mask_style" type="button" id="butmenu" onclick="mostrar_lista_menu();"> Menu </button>
+				</div>
+				<div class="menu_title_style" id="div_title">
+					Panel Clientes
+				</div>
+				<div class="input_style_hidden" id="menulist">
+					<button class='menu_list_style' type="button" id="menuopt1" onclick="visible_element(1);">Panel Clientes</button>
+					<button class='menu_list_style' type="button" id="menuopt2" onclick="visible_element(2);">Gestion Clientes</button>
+					<button class='menu_list_style' type="button" id="menuopt3" onclick="visible_element(3);">Gestion Servicio</button>
+					<button class='menu_list_style' type="button" id="menuopt4" onclick="visible_element(4);">Historial</button>
+					<button class='menu_list_style' type="button" id="menuopt5" onclick="visible_element(5);">Impor./Expor Datos</button>
+				</div>
+			</div>
+
+			<div class="input_style_hidden" id="allbutons">
+				<div class="cajas_style">
+					<button class="butt_menu_style" type="button" id="butopt1" onclick="visible_element(1);">
+					Panel Clientes
+				</div>
+				<div class="cajas_style">
+					<button class="butt_menu_style" type="button" id="butopt2" onclick="visible_element(2);">
+					Gestion Clientes
+				</div>
+				<div class="cajas_style" >
+					<button class="butt_menu_style" type="button" id="butopt3" onclick="visible_element(3);">
+					Gestion Servicio
+				</div>
+				<div class="cajas_style">
+					<button class="butt_menu_style" type="button" id="butopt4" onclick="visible_element(4);">
+					Historial
+				</div>
+				<div class="cajas_style">
+					<button class="butt_menu_style" type="button" id="butopt5" onclick="visible_element(5);">
+					Impor./Expor Datos
+				</div>
+			</div>
+		<! ---------------- Seccion Siempre Visible ------------------>
+		<section class="label_style" id="seccion_fija">
+			<div class="cajas_style">Buscara Servicios: 
+				<input class="mask_style" type="search" id="buscar_cc" placeholder="Ingrese Nombre de Cuenta" list="list_datacc">
+			</div>
+		</section>
+		<! ---------------- Seccion1 Panel Clientes ------------------>
+
+		<section class="label_style" id="seccion1">
+			<section class="label_style" id="sect_rv"></section>
+			<section class="element_style_hidden" id="detalles_cc"></section>
+			<div class="cajas_style">Ingrese Monto:
+				<input readonly="" class="input_style_td" type="text" id="text_mask_monto_pg" onclick="mostrar_input();" onselect="mostrar_input();">
+				<input type="number" readwrite="" class="input_style_hidden" onkeyup="save_inputs_cliente();" onclick="save_inputs_cliente();" onchange="save_inputs_cliente();" step="0.01" min="0.01" id="input_monto_pg" onfocus="ocultar_input();" placeholder="Ingrese Monto">
+			</div>
+			<div class="cajas_style">Ingrese Nombre:
+				<input class="mask_style" type="text" id="input_nombre_pg" placeholder="Ingrese Nombre de Cliente" list="listcliente">
+			</div>
+			<div class="cajas_style">Ingrese Descripcion:
+				<input class="input_desc_style" type="text" id="input_desc_pg" placeholder="Ingrese Descripcion">
+			</div>
+			<div class="cajas_style">
+				<button class="mask_style" type="button" id="butt_savepg" onclick="button_reg_pago();">Registrar</button>
+			</div>
+			<section class="label_style" id="registroactual"></section>
+			<datalist id="listcliente"></datalist>
+		</section>
+		<! ------- Seccion2 Gestion Clientes ------------- >
+		<section class="label_style" id="seccion2">
+			<section class="label_style" id="sect_rp"></section>
+			<datalist id="list_datacc"></datalist>
+		</section>
+
+		<! ------- Seccion3 Gestion Servicios ------------- >
+
+		<section class="label_style" id="seccion4">
+			<section class="label_style" id="sect_rs"></section>
+			<section class="label_style" id="gestioncl"></section>
+		</section>
+
+		<! ------- Seccion4 Historial de Pagos ------------- >
+		<section class="label_style" id="seccion3">
+			<div class="cajas_style">Seleccione Fecha: 
+				<select class="mask_style" id="selchisfec"></select>
+			</div>
+			<section class="label_style" id="histpg"></section>
+
+			<div class="input_style_hidden">
+				<button class="mask_style" type="button" id="buthist" onclick="eliminar_todo(0);">
+				Borrar Historial
+			</div>
+			<label class="input_style_hidden" id="histlabel">
+				Confirmar Aqui: <input  type="checkbox" id="histcheck">
+			</label>
+
+			<section class="input_style_hidden" id="test_imgs"></section>
+		</section>
+
+		<! ---------------- Seccion5 Inportar/Exportar los datos   ------------------>
+
+		<section class="label_style" id="seccion5">
+			<div class="label_style">Obtener Datos Desde un archivo CVS:</div>
+			<div class="cajas_style">
+				<label class="" for="archivos">Seleccione archivo: </label>
+				<input class="custom-file-input" type="file" name="archivos" id="archivos" accept=".csv"/>
+			</div>
+			<div class="cajas_style">Integracion de los datos: 
+				<select class="mask_style" id="selc_integr" onchange = "">
+					<option  value="0">Combinar Datos</option>
+					<option  value="1">Remplazar Datos</option>
+					<option  value="3">Leer Captures</option>
+				</select>
+			</div>
+			<div class="cajas_style">Pulse para Integrar los Datos: 
+				<button class="mask_style" type="button" id="butt_integr" onclick="butt_integrar();">Confirmar</button>
+			</div>
+			<div class="label_style">Guardar datos en un archivo CVS:</div>
+			<div class="cajas_style">Pulse para guardar el CVS: 
+				<button class="mask_style" type="button" id="butt_cvs" onclick="butt_guardar_datos();">Guardar</button>
+			</div>
+			<label class="mask_style" id="histlabel">
+				Marque para guardar Captures: <input  type="checkbox" id="captcheck" >
+			</label>
+		</section>
+
+	</body>
+</html>
