@@ -545,6 +545,10 @@ button:hover {
 .mask_style:hover {
 	background-color: rgba(206, 24, 30, 0.5);
 }
+.input_desc_style:hover {
+	background-color: rgba(206, 24, 30, 0.5);
+}
+
 .input_style_edicion_td:hover {
 	background-color: rgba(206, 24, 30, 0.5);
 }

@@ -22,8 +22,15 @@ function check_windows_siz() {
 			objref.style.setProperty("--cel-siz", '5%');
 			objref.style.setProperty("--siz-img", '100%');
 			gl_mobil = true;
+
+			//Crea la tabla de Registro de Pagos
 			create_table_pagos();
-			create_table_cuentas();
+
+			//Crea la tabla de Registro de Cuentas
+			create_table_clientes();
+
+			//Crea la tabla para registro de servicios
+			create_table_servicios();
 		}
 	}
 	else if(ancho >= 1024) {
@@ -36,8 +43,15 @@ function check_windows_siz() {
 		objref.style.setProperty("--siz-img", '40%');
 		if(gl_mobil) {
 			gl_mobil = false;
+
+			//Crea la tabla de Registro de Pagos
 			create_table_pagos();
-			create_table_cuentas();
+
+			//Crea la tabla de Registro de Cuentas
+			create_table_clientes();
+
+			//Crea la tabla para registro de servicios
+			create_table_servicios();
 		}
 	}
 }

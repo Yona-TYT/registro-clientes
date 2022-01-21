@@ -182,20 +182,20 @@ function create_table(){
 	return null;
 }
 
-function create_table_cuentas(){
+function create_table_clientes(){
 
 	//----------------------------------------------------------------
 	//Nombre de las celdas value--------------------------------------
-	var name_cel = ["Nombre", "Concepto", "Monto Total", "Accion"];
+	var name_cel = ["Nombre", "Telefono", "Correo", "Accion"];
 	var name_siz = name_cel.length;
 	//----------------------------------------------------------------
 
-	var sect_table = document.getElementById("sect_rp");
+	var sect_table = document.getElementById("sect_cl");
 
 	sect_table.innerHTML = "";
 
 	var tabla = document.createElement("table");
-	tabla.setAttribute("id", "table_rp");
+	tabla.setAttribute("id", "table_cl");
 
 	// Creamos un elemento <table> y un elemento <tbody>
 	var tblBody = document.createElement("tbody");
@@ -207,7 +207,7 @@ function create_table_cuentas(){
 		// Creamos las hileras de la tabla
 		var fila = document.createElement("tr");
 
-		fila.setAttribute("id", "filacc"+j);
+		fila.setAttribute("id", "filacl"+j);
 
 		for (var i = 0; i < siz_col; i++) {
 
@@ -219,12 +219,12 @@ function create_table_cuentas(){
 			if(siz_f==0){
 				var celda = document.createElement("td");
 
-				celda.setAttribute("id", "celdcc"+celda_id)
+				celda.setAttribute("id", "celdcl"+celda_id)
 				celda.setAttribute("class","celda_style");
 
 				// Creamos 2 elementos de entrada
 				var input = document.createElement("input");
-				input.setAttribute("id", "inputcc"+celda_id);
+				input.setAttribute("id", "inputcl"+celda_id);
 				input.setAttribute("type", "number");
 				var tex_mask = document.createElement("input");
 				input.setAttribute("readonly", "");
@@ -236,7 +236,6 @@ function create_table_cuentas(){
 				input.setAttribute("value", name_cel[siz_c]);
 				input.setAttribute("readonly", "");
 				input.setAttribute("class","colum_name_style");
-				input.setAttribute("onselect", "el_unselec();");
 
 				celda.innerHTML= input.outerHTML;
 			
@@ -249,7 +248,7 @@ function create_table_cuentas(){
 				//lista_tx += add_text_fila(j);
 
 				var celda = document.createElement("td");
-				celda.setAttribute("id", "celdcc"+celda_id)
+				celda.setAttribute("id", "celdcl"+celda_id)
 
 				// Creamos 2 elementos de entrada
 				var input = document.createElement("input");
@@ -260,11 +259,12 @@ function create_table_cuentas(){
 				tex_mask.setAttribute("class", "input_style_edicion_td");
 				tex_mask.setAttribute("placeholder", "Ingrese Valor");
 
-				input.setAttribute("id", "inputcc"+celda_id);
+				input.setAttribute("id", "inputcl"+celda_id);
 				input.setAttribute("placeholder", "Ingrese Valor");
 
 				//Cuadro De nombres
-				if (siz_c==0 || siz_c==1){
+				if (siz_c==0 || siz_c==2){
+					input.setAttribute("onselect", "el_unselec();");
 					input.setAttribute("class","input_style_td");
 					input.setAttribute("class","input_style_edicion_td");
 					input.setAttribute("type", "text");
@@ -272,28 +272,15 @@ function create_table_cuentas(){
 					input.setAttribute("onFocus", "ocultar_input();");
 				}
 				//Cuadros de entrada numerica
-				if(siz_c==2 ){
-					input.setAttribute("onclick","get_input_value_rc();");
-					input.setAttribute("onkeyup","get_input_value_rc();");
-					input.setAttribute("onchange","get_input_value_rc();");
-					//input.setAttribute("onchange","enviar_index();");
+				if(siz_c==1){
+					input.setAttribute("class","input_desc_style");
 
-					input.setAttribute("class","input_style_hidden");
-
-					input.setAttribute("step", "0.10");
-					input.setAttribute("min", "0.00");
-					input.setAttribute("lang", "en");
-
-					//para la mask del cuadro
-					tex_mask.setAttribute("id", "text_maskcc"+celda_id);
-					celda.appendChild(tex_mask);
+					input.setAttribute("type", "number");
+					input.setAttribute("step", "1");
+					input.setAttribute("min", "1");
+					input.setAttribute("onclick", "el_selec_act();");
+					input.setAttribute("ondblclick","el_selec_act();");
 					celda.appendChild(input);
-
-					tex_mask.setAttribute("onClick", "mostrar_input();");
-					tex_mask.setAttribute("onSelect", "mostrar_input();");
-					tex_mask.setAttribute("placeholder", "Ingrese Valor");
-					input.setAttribute("onFocus", "ocultar_input();");
-
 				}
 				if(siz_c==3){
 					celda.setAttribute("class", "button_style_r");
@@ -301,8 +288,8 @@ function create_table_cuentas(){
 					button.setAttribute("class", "mask_style");
 					button.setAttribute("type", "button");
 					button.innerHTML= "Guardar";
-					button.setAttribute("onclick","guardar_cuenta();");
-					button.setAttribute("id", "buttrp"+j);
+					button.setAttribute("onclick","guardar_cl();");
+					button.setAttribute("id", "buttcl"+j);
 					celda.appendChild(button);
 				}
 				fila.appendChild(celda);
@@ -440,7 +427,7 @@ function create_table_servicios(){
 					button.setAttribute("class", "mask_style");
 					button.setAttribute("type", "button");
 					button.innerHTML= "Guardar";
-					button.setAttribute("onclick","guardar_cuenta();");
+					button.setAttribute("onclick","guardar_servicio();");
 					button.setAttribute("id", "buttrs"+j);
 					celda.appendChild(button);
 				}
@@ -513,7 +500,7 @@ function create_table_pagos(){
 				input.setAttribute("value", name_cel[siz_c]);
 				input.setAttribute("readonly", "");
 				input.setAttribute("class","colum_name_style");
-				input.setAttribute("onselect", "el_unselec();");
+
 
 				celda.innerHTML= input.outerHTML;
 			
@@ -530,9 +517,9 @@ function create_table_pagos(){
 				input.setAttribute("type", "number");
 
 				input.setAttribute("id", "pginput"+celda_id);
-				input.setAttribute("onselect", "el_unselec();");
 				//Cuadros de Textos
 				if (siz_c < 2){
+					input.setAttribute("onselect", "el_unselec();");
 					input.setAttribute("class","input_style_td");
 
 					input.setAttribute("type", "text");
@@ -540,12 +527,16 @@ function create_table_pagos(){
 					celda.appendChild(input);
 				}
 				if (siz_c == 2){
-					input.setAttribute("class","mask_style");
+
+					input.setAttribute("class","input_desc_style");
 
 					input.setAttribute("type", "number");
 					input.setAttribute("step", "1");
 					input.setAttribute("min", "1");
 					input.value = 1;
+
+					input.setAttribute("onclick", "el_selec_act();");
+					input.setAttribute("ondblclick","el_selec_act();");
 					celda.appendChild(input);
 				}
 				if(siz_c==3){

@@ -37,8 +37,8 @@ function buscar_lista_cuenta()
 	gl_captures = new Array();
 	gl_capt_id = new Array();
 
-	var input_cc = document.getElementById("buscar_cc");
-	var text = input_cc.value;
+	var input_serv = document.getElementById("buscar_cc");
+	var text = input_serv.value;
 	text = text.toLowerCase();
 	reset_inputs_pagos();
 	var result = false;
@@ -52,13 +52,13 @@ function buscar_lista_cuenta()
 	gl_data_count = 1;
 
 	//console.log("Finished: "+gl_curr_cuenta);
-	for (var j = 0; j<gl_general.cu_save_id; j++) {
-		var nombre = gl_general.cuentlist[j];
+	for (var j = 0; j < gl_servicio.nombre.length; j++) {
+		var nombre = gl_servicio.nombre[j];
 		if (nombre!=null) nombre = nombre.toLowerCase();
 		else continue;
 		result = nombre.includes(text);
 
-		if(result && gl_general.etdtlist[j]){
+		if(result){
 			var test = nombre.search(new RegExp("(^)" + text + "($)"));
 			if( test != -1){
 				if(gl_bus_sw){
@@ -71,9 +71,12 @@ function buscar_lista_cuenta()
 			}
 			//console.log("Text: "+test);
 			gl_curr_cuenta = true;
-			mostrar_cuentas(j);
-			mostrar_clientes(j);
-			start_inputs_pagos();
+			mostrar_cuentas(0);
+			mostrar_clientes(0);
+			start_inputs_pagos(j);
+
+			// ---------------------- test ---------------------
+			clientes_main();							//Se crean las listas de clientes
 			break;
 		}
 	}
@@ -89,21 +92,21 @@ function reset_inputs_pagos() {
 	input_nr.value = 1;
 }
 
-function start_inputs_pagos() {
-	var gen_bs = gl_general.gen_bs;
-	var monto_tot_bs = calc_dolar_a_bs(gl_cuenta.monto_dol, gen_bs);
-	var nombre = gl_cuenta.nombre + " - " + gl_cuenta.desc;	//Titulo para la cuenta
-	var monto = gl_opt_moneda == 0?get_mask(gl_cuenta.monto_dol,"$"):get_mask(monto_tot_bs,"Bs");
+function start_inputs_pagos(j) {
 
-	var monto_pgdo_bs = calc_dolar_a_bs(gl_cuenta.monto_pagado, gen_bs);
-	var pagado = gl_opt_moneda == 0?get_mask(gl_cuenta.monto_pagado,"$"):get_mask(monto_pgdo_bs,"Bs");
+	gl_general.temp_nombre =  gl_servicio.nombre[j];
+	gl_general.temp_desc =  gl_servicio.desc[j];
+	gl_general.temp_costo =  gl_servicio.costo[j];
+
+	var nombre = gl_general.temp_nombre + " - " + gl_general.temp_desc;	//Titulo para la cuenta
+	var costo = get_mask(gl_general.temp_costo,"$");
 
 	var input_nomb = document.getElementById("pginput"+1+""+0);
 	var input_cost = document.getElementById("pginput"+1+""+1);
 	var input_nr = document.getElementById("pginput"+1+""+2);
 
 	input_nomb.value = nombre;
-	input_cost.value = monto;
+	input_cost.value = costo;
 	input_nr.value = 1;
 
 	//Test cambia tamaño de la fuente para ajustar a l espacio pequeño
@@ -119,13 +122,12 @@ function start_inputs_pagos() {
 
 function add_service(){
 	if(gl_curr_cuenta){
-		var input_nomb = document.getElementById("pginput"+1+""+0);
-		//var input_cost = document.getElementById("pginput"+1+""+1);
 		var input_nr = document.getElementById("pginput"+1+""+2);
 
-		gl_general.temp_name.push(input_nomb.value);
-		gl_general.temp_cost.push(gl_cuenta.monto_dol);
-		gl_general.temp_nr.push(input_nr.value);
+		gl_general.list_nombre.push(gl_general.temp_nombre);
+		gl_general.list_desc.push(gl_general.temp_desc);
+		gl_general.list_costo.push(gl_general.temp_costo);
+		gl_general.list_nr.push(input_nr.value);
 
 		create_service_list();
 	}
@@ -138,24 +140,23 @@ function create_service_list(){
 	secc_cc.innerHTML = "";
 	var secc_reg = document.getElementById("registroactual");
 	secc_reg.innerHTML = "";
-	var secc_gcl = document.getElementById("gestioncl");
-	secc_gcl.innerHTML = "";
+
 
 	//console.log("Div Ind a "+gl_cliente.indx_a+" Ind b "+gl_cliente.indx_b[0]);
-	gl_cuenta.monto_pagado = 0;
+	gl_servicio.monto_pagado = 0;
 	var gen_bs = gl_general.gen_bs;
 
 	//gl_capt_id = new Array();				//Limpia la lista de claves para los captures
 
 	//gl_hist_pg = new reg_cliente();			//Inicia la listas para el historial
 
-	if(gl_curr_cuenta){
+	if(gl_curr_cuenta ){
 		var total = 0;
 		var list_tx = "";
-		for (var j = 0; j < gl_general.temp_name.length ; j++) {
-			var name = 	gl_general.temp_name[j];
-			var cost = gl_general.temp_cost[j];
-			var nr = gl_general.temp_nr[j];
+		for (var j = 0; j < gl_general.list_nombre.length ; j++) {
+			var name = 	gl_general.list_nombre[j];
+			var cost = gl_general.list_costo[j];
+			var nr = gl_general.list_nr[j];
 
 			var buttq = "<button type='button' id='butt_x"+j+"' class='butt_style_x' onclick='button_quit_service("+j+");'>X</button>";
 
@@ -168,11 +169,6 @@ console.log(""+cost+"")
 		var total_tx =  "<div class='div_list_style' id='divpg"+j+"'>Costo Tota: "+get_mask(total,"$")+"</div>";
 
 		secc_reg.innerHTML = total_tx + list_tx;
-	
-		//start_inputs_pagos();
-		//mostrar_detalles_cc();
-		//mostrar_historial();
-		//preloder_filtro_fec();
 	}
 }
 
@@ -180,9 +176,9 @@ function button_quit_service(index) {
 	var butt = document.activeElement;
 	butt.setAttribute("class","element_style_hidden");
 	
-	gl_general.temp_name.splice(index, 1);
-	gl_general.temp_cost.splice(index, 1);
-	gl_general.temp_nr.splice(index, 1);
+	gl_general.list_nombre.splice(index, 1);
+	gl_general.list_costo.splice(index, 1);
+	gl_general.list_nr.splice(index, 1);
 
 	create_service_list();
 }
@@ -199,30 +195,9 @@ function button_quit_service(index) {
 function save_inputs_cliente(){
 	var gen_bs = gl_general.gen_bs;
 	var mask = document.getElementById("text_mask_monto_pg");
-	var monto = document.getElementById("input_monto_pg");
+	var ident = document.getElementById("input_monto_pg");
 
-	var mont_dol = null;
-	var mont_bs = null;
-	//Dolar
-	if(gl_opt_moneda == 0){
-		mont_dol = parseFloat(monto.value)?parseFloat(monto.value):0;
-		mont_bs = calc_dolar_a_bs(mont_dol, gen_bs);
-
-		gl_general.temp_monto_dol = mont_dol;					//Guarda el monto en dolares
-		gl_general.temp_monto_bs = mont_bs;						//Guarda el monto en bolivares
-
-		mask.value = get_mask(mont_dol,"$");
-	}
-	//Bolivares
-	else if(gl_opt_moneda == 1){
-		mont_bs = parseFloat(monto.value)?parseFloat(monto.value):0;
-		mont_dol = calc_bs_a_dolar(mont_bs, gen_bs);
-
-		gl_general.temp_monto_dol = mont_dol;					//Guarda el monto en dolares
-		gl_general.temp_monto_bs = mont_bs;						//Guarda el monto en bolivares
-
-		mask.value = get_mask(mont_bs,"Bs");
-	}
+	mask.value = get_mask_int_a(ident.value);
 	
 	buscar_lista_cuenta();
 }
@@ -295,14 +270,14 @@ function button_reg_pago(){
 		//console.log("Save Ind a "+index_a+" Monto Dol: "+monto_a+" total: "+gl_cliente.monto_totl[index_a]);
 
 		gl_cliente.start = true;									//Se marca como iniciado
-		gl_cliente.clave = gl_cuenta.clave;
- 		agregar_cliente(gl_cliente, gl_cuenta.clave);				//Se guardan la informacion de Clientes
+		gl_cliente.clave = gl_servicio.clave;
+ 		agregar_cliente(gl_cliente, gl_servicio.clave);				//Se guardan la informacion de Clientes
 		agregar_gene_datos(gl_general);
-		gl_cuenta.hash = null;
- 		agregar_cuenta(gl_cuenta, gl_cuenta.clave);				//Se guardan la informacion de Cuenta
+		gl_servicio.hash = null;
+ 		agregar_cuenta(gl_servicio, gl_servicio.clave);				//Se guardan la informacion de Cuenta
 
 		//Tests 
-		//remove_capture(""+gl_cuenta.clave+""+index_a+""+index_b+"");		//Limpia el espacio en casi de que existan captures basura
+		//remove_capture(""+gl_servicio.clave+""+index_a+""+index_b+"");		//Limpia el espacio en casi de que existan captures basura
 
 		nombre.value = "";
 		inp_desc.value = "";
@@ -367,31 +342,24 @@ function index_resul() {
 	this.b = 0;
 }
 
-function crear_datalist_cl() {
-	var data_lista = document.getElementById("listcliente");
-	data_lista.innerHTML = "";
-	for (var j = 0; j < gl_cliente.indx_a; j++) {
-		data_lista.innerHTML += "<option value='"+gl_cliente.cliente[j]+"'>";
-	}
-}
 
 function mostrar_detalles_cc(){
 	var secc_det = document.getElementById("detalles_cc");
 
 	var gen_bs = gl_general.gen_bs;
-	var monto_tot_bs = calc_dolar_a_bs(gl_cuenta.monto_dol, gen_bs);
-	var monto_pag_bs = calc_dolar_a_bs(gl_cuenta.monto_pagado, gen_bs);
+	var monto_tot_bs = calc_dolar_a_bs(gl_servicio.monto_dol, gen_bs);
+	var monto_pag_bs = calc_dolar_a_bs(gl_servicio.monto_pagado, gen_bs);
 
-	var mont_estd = "<div class='div_list_style'> Estimado: "+ get_mask(gl_cuenta.monto_dol,"$") +" / "+ get_mask(monto_tot_bs,"Bs")+"</div>";
+	var mont_estd = "<div class='div_list_style'> Estimado: "+ get_mask(gl_servicio.monto_dol,"$") +" / "+ get_mask(monto_tot_bs,"Bs")+"</div>";
 
 	var mask = "<input readonly='' class='input_style_td' id='text_mask_edit_mont' onclick='mostrar_input();' onselect='mostrar_input();'>"; 
 	var input = "<input type='number' readwrite='' class='input_style_hidden' onkeyup='input_edit_estimado();' onclick='input_edit_estimado();' onchange='input_edit_estimado();' step='0.01' min='0.01' id='input_edit_mont' onfocus='ocultar_input();' placeholder='Ingrese Monto'>"
 
 	var edit_mont = "<div class='div_list_style'>Edit. Estimado ("+(gl_opt_moneda==0?"$":"Bs")+"): <div id='div_edit_mont'>"+ mask + input +"</div></div>";
-	var monto_p = "<div class='div_list_style'> Pagado: "+ get_mask(gl_cuenta.monto_pagado,"$") +" / "+ get_mask(monto_pag_bs,"Bs")+"</div>";
-	var estado = "<div class='div_list_style'> Estado: "+ gl_cuenta.estado +"</div>";
-	var fecha = "<div class='div_list_style'> Fecha: "+ gl_cuenta.fecha +"</div>";
-	var hora = "<div class='div_list_style'> Hora: "+ gl_cuenta.hora +"</div>";
+	var monto_p = "<div class='div_list_style'> Pagado: "+ get_mask(gl_servicio.monto_pagado,"$") +" / "+ get_mask(monto_pag_bs,"Bs")+"</div>";
+	var estado = "<div class='div_list_style'> Estado: "+ gl_servicio.estado +"</div>";
+	var fecha = "<div class='div_list_style'> Fecha: "+ gl_servicio.fecha +"</div>";
+	var hora = "<div class='div_list_style'> Hora: "+ gl_servicio.hora +"</div>";
 
 	var but_nam_q = "Quitar";
 	var but_q = "<button type='button' class='butt_style' id='butt_qcc' onclick='button_marcar_cuenta();'>"+but_nam_q+"</button>"
@@ -422,7 +390,7 @@ function button_detalles_cc() {
 			var mont_bs = null;
 			//Dolar
 			if(gl_opt_moneda == 0){
-				mont_dol = gl_cuenta.monto_dol;
+				mont_dol = gl_servicio.monto_dol;
 				mont_bs = calc_dolar_a_bs(mont_dol, gen_bs);
 
 				mask.value = get_mask(mont_dol,"$");
@@ -430,7 +398,7 @@ function button_detalles_cc() {
 			}
 			//Bolivares
 			else if(gl_opt_moneda == 1){
-				mont_dol = gl_cuenta.monto_dol;
+				mont_dol = gl_servicio.monto_dol;
 				mont_bs = calc_dolar_a_bs(mont_dol, gen_bs);
 
 				mask.value = get_mask(mont_bs,"Bs");
@@ -457,7 +425,7 @@ function input_edit_estimado() {
 		mont_dol = parseFloat(monto.value)?parseFloat(monto.value):0;
 		mont_bs = calc_dolar_a_bs(mont_dol, gen_bs);
 
-		gl_cuenta.monto_dol = mont_dol;					//Guarda el monto en dolares
+		gl_servicio.monto_dol = mont_dol;					//Guarda el monto en dolares
 		
 
 		mask.value = get_mask(mont_dol,"$");
@@ -467,12 +435,12 @@ function input_edit_estimado() {
 		mont_bs = parseFloat(monto.value)?parseFloat(monto.value):0;
 		mont_dol = calc_bs_a_dolar(mont_bs, gen_bs);
 
-		gl_cuenta.monto_dol = mont_dol;					//Guarda el monto en dolares
+		gl_servicio.monto_dol = mont_dol;					//Guarda el monto en dolares
 
 		mask.value = get_mask(mont_bs,"Bs");
 	}
 
- 	agregar_cuenta(gl_cuenta, gl_cuenta.clave);				//Se guardan la informacion de Cuenta
+ 	agregar_cuenta(gl_servicio, gl_servicio.clave);				//Se guardan la informacion de Cuenta
 }
 
 
@@ -497,7 +465,7 @@ function button_reinicia_cl() {
 				gl_cliente.hora[j][0] = "";
 			}
 
- 			agregar_cliente(gl_cliente, gl_cuenta.clave);				//Se guardan la informacion de Clientes
+ 			agregar_cliente(gl_cliente, gl_servicio.clave);				//Se guardan la informacion de Clientes
 		}
 
 		butt.innerHTML = "Quitar";
@@ -513,14 +481,14 @@ function button_marcar_cuenta() {
 		butt.innerHTML = "Confirmar";
 	}
 	else if(name == "Confirmar"){
-		gl_general.etdtlist[gl_cuenta.clave] = false;
+		gl_general.etdtlist[gl_servicio.clave] = false;
 		crear_datalist_cc();
 		agregar_gene_datos(gl_general);
 		butt.innerHTML = "Deshacer";
 		return alert("Cuenta Descartada");
 	}
 	else{
-		gl_general.etdtlist[gl_cuenta.clave] = true;
+		gl_general.etdtlist[gl_servicio.clave] = true;
 		agregar_gene_datos(gl_general);
 		crear_datalist_cc();
 		butt.innerHTML = "Quitar";
@@ -535,7 +503,7 @@ function mostrar_detalles_cl(){
 	var secc_gcl = document.getElementById("gestioncl");
 	secc_gcl.innerHTML = "";
 	//console.log("Div Ind a "+gl_cliente.indx_a+" Ind b "+gl_cliente.indx_b[0]);
-	gl_cuenta.monto_pagado = 0;
+	gl_servicio.monto_pagado = 0;
 	var gen_bs = gl_general.gen_bs;
 
 	gl_capt_id = new Array();				//Limpia la lista de claves para los captures
@@ -550,7 +518,7 @@ function mostrar_detalles_cl(){
 				mostrar_gcl(j);
 				var cliente = gl_cliente.cliente[j];
 				var monto_total = gl_cliente.monto_totl[j];
-				gl_cuenta.monto_pagado += monto_total;
+				gl_servicio.monto_pagado += monto_total;
 				var monto_tot_bs = calc_dolar_a_bs(monto_total, gen_bs);
 				var buttm = "<button type='button' class='butt_style' onclick='button_detalles_pg("+j+");'>Detalles</button>";
 				var check = "<input class='' type='checkbox' id='check_x"+j+"' onchange='check_ocultar_x("+j+","+(gl_cliente.indx_b[j]+1)+")'>";
@@ -580,7 +548,7 @@ function mostrar_detalles_cl(){
 					var hora = gl_cliente.hora[j][i];
 
 					add_fech_list(fecha);					//Compara las fechas y agg solo si son distintas
-					gl_hist_pg.pagoid.push(""+gl_cuenta.clave+""+j+""+i+"");
+					gl_hist_pg.pagoid.push(""+gl_servicio.clave+""+j+""+i+"");
 					gl_hist_pg.cliente.push(cliente);
 					gl_hist_pg.actual_bs.push(actual_bs);
 					gl_hist_pg.monto_dol.push(monto_dol);
@@ -590,9 +558,9 @@ function mostrar_detalles_cl(){
 
 					var buttq = "<button type='button' id='butt_x"+j+""+i+"' class='element_style_hidden' onclick='button_quit_pg("+j+","+i+");'>X</button>";
 
-					var buttcap = "<button type='button' class='butt_style' onclick='button_cap_pg("+gl_cuenta.clave+","+j+","+i+");'>Capture</button>";
-					var inp_file = "<input type='file' class='custom-file-input' name='"+gl_cuenta.clave+""+j+""+i+"' onchange='cargar_capture(event);' accept='.jpg, .png'/>";
-					var cap_secc = "<section class='element_style_hidden' id='divcapt"+gl_cuenta.clave+""+j+""+i+"'><img></img>"+inp_file+"</section>";
+					var buttcap = "<button type='button' class='butt_style' onclick='button_cap_pg("+gl_servicio.clave+","+j+","+i+");'>Capture</button>";
+					var inp_file = "<input type='file' class='custom-file-input' name='"+gl_servicio.clave+""+j+""+i+"' onchange='cargar_capture(event);' accept='.jpg, .png'/>";
+					var cap_secc = "<section class='element_style_hidden' id='divcapt"+gl_servicio.clave+""+j+""+i+"'><img></img>"+inp_file+"</section>";
 					detalles += "<div class='div_list_style'>"/*+j+""+i+""*/+buttq+" ["+(indx_b-i+1)+""+desc+"]  Monto: "+get_mask(monto_dol,"$")+" / "+get_mask(monto_bs,"Bs")+" &nbsp <strong>Fecha: "+fecha+" "+hora+"</strong>&nbsp"+buttcap+"</div>"+cap_secc;
 				}
 				var inside = "<div class='element_style_hidden' id='div_pag"+j+"'>"+ detalles +"</div>";

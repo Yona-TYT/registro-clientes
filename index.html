@@ -88,23 +88,26 @@
 		<! ---------------- Seccion Siempre Visible ------------------>
 		<section class="label_style" id="seccion_fija">
 			<div class="cajas_style">Buscara Servicios: 
-				<input class="mask_style" type="search" id="buscar_cc" placeholder="Ingrese Nombre de Cuenta" list="list_datacc">
+				<input class="mask_style" type="search" id="buscar_cc" placeholder="Ingrese Nombre de Servicio" list="listserv">
 			</div>
 		</section>
-		<! ---------------- Seccion1 Panel Clientes ------------------>
+		<! ---------------- Seccion1 Panel Registo ------------------>
 
 		<section class="label_style" id="seccion1">
 			<section class="label_style" id="sect_rv"></section>
 			<section class="element_style_hidden" id="detalles_cc"></section>
-			<div class="cajas_style">Ingrese Monto:
-				<input readonly="" class="input_style_td" type="text" id="text_mask_monto_pg" onclick="mostrar_input();" onselect="mostrar_input();">
-				<input type="number" readwrite="" class="input_style_hidden" onkeyup="save_inputs_cliente();" onclick="save_inputs_cliente();" onchange="save_inputs_cliente();" step="0.01" min="0.01" id="input_monto_pg" onfocus="ocultar_input();" placeholder="Ingrese Monto">
+			<div class="cajas_style">Ingrese Telefono:
+				<input class="input_style_td" type="number" id="input_monto_pg"   placeholder="Ingrese Nr. Telefono de Cliente">		
 			</div>
 			<div class="cajas_style">Ingrese Nombre:
 				<input class="mask_style" type="text" id="input_nombre_pg" placeholder="Ingrese Nombre de Cliente" list="listcliente">
 			</div>
 			<div class="cajas_style">Ingrese Descripcion:
-				<input class="input_desc_style" type="text" id="input_desc_pg" placeholder="Ingrese Descripcion">
+				<select class="mask_style" id="selc_vehic" onchange = "">
+					<option  value="0">Vehiculo 1</option>
+					<option  value="1">Vehiculo 2</option>
+					<option  value="3">Vehiculo 3</option>
+				</select>
 			</div>
 			<div class="cajas_style">
 				<button class="mask_style" type="button" id="butt_savepg" onclick="button_reg_pago();">Registrar</button>
@@ -114,15 +117,17 @@
 		</section>
 		<! ------- Seccion2 Gestion Clientes ------------- >
 		<section class="label_style" id="seccion2">
-			<section class="label_style" id="sect_rp"></section>
-			<datalist id="list_datacc"></datalist>
+			<section class="label_style" id="sect_cl"></section>
+			<section class="label_style" id="gestioncl"></section>
+
 		</section>
 
 		<! ------- Seccion3 Gestion Servicios ------------- >
 
 		<section class="label_style" id="seccion4">
 			<section class="label_style" id="sect_rs"></section>
-			<section class="label_style" id="gestioncl"></section>
+			<section class="label_style" id="gestionrs"></section>
+			<datalist id="listserv"></datalist>
 		</section>
 
 		<! ------- Seccion4 Historial de Pagos ------------- >

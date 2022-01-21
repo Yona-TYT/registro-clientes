@@ -112,9 +112,12 @@ function obtener_general(evento) {
 		else if(curr_fecha != fecha){
 			gl_general.fecha = curr_fecha;
 		}
-		mostrar_cuentas(gl_general.cu_save_id);
-		mostrar_clientes(gl_general.cl_save_id);
-		crear_datalist_cc();
+
+
+		//------------------------ Test
+		mostrar_cuentas(0);
+		mostrar_clientes(0);
+
 
 	}
 	else{
@@ -144,17 +147,20 @@ function mostrar_cuentas(clave) {
 }
 
 function obtener_cuentas(evento) {
-	gl_cuenta = new reg_servicio();
+	gl_servicio = new reg_servicio();
 	var resultado = evento.target.result;
 	if(resultado){
-		gl_cuenta = resultado.rg_cuenta;
+		gl_servicio = resultado.rg_cuenta;
+		// Inicializa las funciones del registro Servicios
+		servicios_main();
 	}
-	//console.log("Claave cc "+gl_cuenta.clave +" Nr: "+gl_cliente.indx_a)
+	//console.log("Claave cc "+gl_servicio.clave +" Nr: "+gl_cliente.indx_a)
 }
 //----------------------------------------------------------------------
 
 //Manejo de datos para los Clientes-----------------------------------------
 function mostrar_clientes(clave) {
+console.log("Clave cliente: "+clave+"");
 	var transaccion = bd.transaction(["clientes"]);
 	var almacen = transaccion.objectStore("clientes");
 	var solicitud = almacen.get(clave);
@@ -167,8 +173,8 @@ function obtener_clientes(evento) {
 	if(resultado){
 		gl_cliente = resultado.rg_cliente;
 	}
-	mostrar_detalles_cl();
-	crear_datalist_cl();
+	// Inicializa las listas de clientes
+	clientes_main();
 }
 //----------------------------------------------------------------------
 
@@ -269,15 +275,16 @@ function general_datos() {
 	this.captid = new Array();			//Guarda ids de los captures
 	this.etdcapt = new Array();			//Guarda ids de los captures
 
+	//Datos individuales para manejo temporal
+	this.temp_nombre = "";					//Nombre de servicio
+	this.temp_desc = "";					//Texto descritivo
+	this.temp_costo = 0;					//Costo del servicio
 
-	// --------------------------------------------------------------------
-	this.temp_name = new Array();
-	this.temp_cost = new Array();
-	this.temp_nr = new Array();
-
-	
-	
-
+	// Datos temporales para la lista
+	this.list_nombre = new Array();
+	this.list_desc = new Array();
+	this.list_costo = new Array();
+	this.list_nr = new Array();
 
 }
 
@@ -291,9 +298,12 @@ function reg_cliente() {
 
 	this.fechalist = new Array(); 		//Lista de fechas para el historial
 
-	this.cliente = new Array();			//Nombre de cada Cliente
+	this.nombre = new Array();			//Nombre de cada Cliente
+	this.ident = new Array();			//Documento identidad cada cliente
+	this.mail = new Array();			//Correo electronico opcional
 	this.monto_totl = new Array();		//Monoto total de cada cliente
 
+	//Modificar estoooooooooo!.
 	this.actual_bs = new Array();		//Precio del dolara al momento de registrar
 	this.desc = new Array();			//Texto descritivo
 	this.monto_dol = new Array();		//Monto en dolares
@@ -310,8 +320,13 @@ function reg_servicio() {
 	this.clave = 0;						//Clave para guardar/cargar el registro
 	this.hash = null;					//Hash para identificar la cuenta
 
-	this.nombre = null;					//Nombre de propietario
-	this.desc = null;					//Texto descritivo
+	//Datos del servicio guardados
+	this.nombre = new Array();					//Nombre de servicio
+	this.desc = new Array();					//Texto descritivo
+	this.costo = new Array();					//Costo del servicio
+
+	//Modificar estoooooooooo!.
+	//this.desc = null;					
 	this.monto_dol = 0;					//Monto en dolares
 	this.monto_bs = 0;					//Monto en bs
 	this.monto_pagado = 0;				//Monto pagado por todos los Clientes

@@ -113,7 +113,7 @@ function init(){
 	create_table_pagos();
 
 	//Crea la tabla de Registro de Cuentas
-	create_table_cuentas();
+	create_table_clientes();
 
 	//Crea la tabla para registro de servicios
 	create_table_servicios();
@@ -127,19 +127,14 @@ function init(){
 	//Inicia las funciones de menu
 	menu_main();
 
-
 	//Panel de inicio
 
  	visible_element(1);
-
 
 	//--------------------------------------------
 
 	// Inicializa las funciones del registro pagos	
 	pagos_main();
-
-	// Inicializa las funciones del registro cuentas
-	cuentas_main();
 
 	export_main();
 

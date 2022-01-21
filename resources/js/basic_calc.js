@@ -43,19 +43,19 @@ function calc_bs_a_dolar(bs, precio)
 }
 
 function addCommas(nStr,simb = false){
-		
-		nStr += '';
-		x = nStr.split('.');
-		x1 = x[0];
-		x2 = x.length > 1 ? '.' + x[1] : '';
-		var rgx = /(\d+)(\d{3})/;
-		while (rgx.test(x1)) {
-		   x1 = x1.replace(rgx, '$1' + ',' + '$2');
-		}
-		if(simb)
-			return x1 + x2 + " "+simb;
+	nStr.replace(/./g, ',');
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? ',' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+	   x1 = x1.replace(rgx, '$1' + '.' + '$2');
+	}
+	if(simb)
+		return x1 + x2 + " "+simb;
 
-		else return x1 + x2;
+	else return x1 + x2;
 }
 
 function get_mask(numer,simb){
@@ -66,18 +66,25 @@ function get_mask(numer,simb){
 function get_mask_simple(numer,simb){
 	numer = parseFloat(numer)? parseFloat(numer).toFixed(2) : parseFloat(0).toFixed(2);
 	return numer+" "+simb;
+}
 
+function get_mask_int_a(numer,simb){
+	numer = parseInt(numer)? parseInt(numer) : parseInt(0);
+	return addCommas(""+numer+"",simb);
+}
+
+function get_mask_int_b(simb,numer){
+	numer = parseInt(numer)? parseInt(numer) : parseInt(0);
+	return addCommas(numer,simb);
 }
 
 function get_colum_nr(num, tabble_siz, j){
-		return j+(tabble_siz*j)-num;
+	return j+(tabble_siz*j)-num;
 }
 
 function get_fila_nr(num, tabble_siz, i){
-
-		var resusl = ((num)/(tabble_siz))-(2/tabble_siz);
-
-		return resusl;
+	var resusl = ((num)/(tabble_siz))-(2/tabble_siz);
+	return resusl;
 }
 
 

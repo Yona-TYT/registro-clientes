@@ -155,6 +155,7 @@ function ocultar_input(otros = false)
 	var current_id_name = current_input.id;
 	var input_old = current_element;
 
+
 	var result = true;
 	if(!otros){				//Otros inputs distintos a los de ingresar valores numericos
 		try {
@@ -184,12 +185,30 @@ function el_selec(id){
 	var elm = document.getElementById(id);
 	elm.select();
 }
+
+function el_selec_act(){
+	console.log(" Test Selec: " );
+	var elm = document.activeElement;
+	elm.select();
+}
 function el_unselec(){
 	var elm = document.activeElement;
 	var sel = elm.blur();
 
 }
 
+//Configura inputs para las gestiones de listas
+function set_input_edit(name, index){
+	input =	document.createElement("input");
+	input.setAttribute("type", "text");
+	input.setAttribute("class","mask_style");
+	input.style.width = "250px";
+	input.setAttribute("onclick", name+"("+index+");");
+	input.setAttribute("onkeyup", name+"("+index+");");
+	input.setAttribute("onchange", name+"("+index+");");
+	return input;
+
+}
 
 
 
