@@ -176,7 +176,7 @@ window.addEventListener("keypress", function() {
 
 //console.log("key"+class_name);
 
-		if(class_name == "input_style_visible"){
+		if(class_name == "input_style_visible" || class_name == "input_desc_style"){
     		return soloNumeros(event);
 		}
 		else if(class_name == "mask_style" || class_name == "input_style_edicion_td"){

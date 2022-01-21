@@ -7,10 +7,10 @@ function clientes_main(sw = true){
 	var data_lista = document.getElementById("listcliente");
 	data_lista.innerHTML = "";
 
-	console.log(" Test: "+gl_cliente.ident.length + " :: " );
-	for (var j = 0; j<gl_cliente.ident.length; j++) {
+	console.log(" Test: "+gl_cliente.cell.length + " :: " );
+	for (var j = 0; j<gl_cliente.cell.length; j++) {
 		if (sw) mostrar_gcl(j);
-		data_lista.innerHTML += "<option value='"+gl_cliente.nombre[j]+" "+gl_cliente.ident[j]+"'>";
+		data_lista.innerHTML += "<option value='"+gl_cliente.nombre[j]+" "+gl_cliente.cell[j]+"'>";
 	}
 }
 
@@ -37,54 +37,53 @@ function save_inputs_cl(){
 // Se obtienen los valores para registrar clientes desde la tabla
 function get_input_value_cl(){
 
-	var ident = document.getElementById("inputcl11");
-	var mask = document.getElementById("text_maskcl11");
+	var cell = document.getElementById("inputcl11");
+	//var mask = document.getElementById("text_maskcl11");
 
-	mask.value = get_mask_int_a(ident.value);
+	//mask.value = get_mask_int_a(cell.value);
 }
 
 
 // Se guardan los valores de clientes desde la tabla
 function guardar_cl(){
 	var nombre = document.getElementById("inputcl10");
-	var ident = document.getElementById("inputcl11");
+	var cell = document.getElementById("inputcl11");
 	var mail = document.getElementById("inputcl12");
-	var mask = document.getElementById("text_maskcl11");
+	//var mask = document.getElementById("text_maskcl11");
 
 	if (!check_text_resv(nombre.value)){
 		nombre.value = "";
 		return null;
 	}
 
-	if (!check_text_resv(ident.value)){
-		ident.value = "";
+	if (!check_text_resv(cell.value)){
+		cell.value = "";
 		return null;
 	}
-		console.log(" Test:  :: " + gl_cliente.ident.length );
+		console.log(" Test:  :: " + gl_cliente.cell.length );
 	var result = false;
-	var ident_val = parseInt(ident.value)?  parseInt(ident.value) : 0 ;
-	for (var j = 0; j<gl_cliente.ident.length && ident_val != ""; j++) {
-		var save_nr = gl_cliente.ident[j];
+	var cell_val = parseInt(cell.value)?  parseInt(cell.value) : 0 ;
+	for (var j = 0; j<gl_cliente.cell.length && cell_val != ""; j++) {
+		var save_nr = gl_cliente.cell[j];
 		if (save_nr!="") save_nr = parseInt(save_nr);
 		else continue;
-		//console.log(" Test: "+ident_val + " :: " + save_nr );
-		if(ident_val == save_nr){
+		//console.log(" Test: "+cell_val + " :: " + save_nr );
+		if(cell_val == save_nr){
 			result = true;
 			break;
 		}
 	}
 
 	if (result) return alert("El numero de identidad ya existe!.");
-	if(nombre.value != "" && ident_val != ""){
+	if(nombre.value != "" && cell_val != ""){
 
 		gl_cliente.nombre.push(nombre.value);
-		gl_cliente.ident.push(ident_val);
+		gl_cliente.cell.push(cell_val);
 		//gl_cliente.mail.push(mail.value?mail.value:"Sin Correo Electronico");
  		agregar_cliente(gl_cliente, 0);				//Se guardan la informacion de Clientes
 
 		nombre.value = "";
-		ident.value = "";
-		mask.value = "";
+		cell.value = "";
 		mail.value = "";
 
 		clientes_main();							//Se crean las listas de clientes
@@ -143,7 +142,7 @@ function button_quit_gcl(index) {
 	temp_cliente.clave = gl_cliente.clave;	
 
 	var des = 0;
-	for (var j = 0; j < gl_cliente.ident.length; j++) {
+	for (var j = 0; j < gl_cliente.cell.length; j++) {
 
 		if(j == index) {
 			des = 1;
@@ -152,7 +151,7 @@ function button_quit_gcl(index) {
 		temp_cliente.indx_b[j-des] = gl_cliente.indx_b[j];
 		temp_cliente.monto_totl[j-des] = gl_cliente.monto_totl[j];
 		temp_cliente.nombre[j-des] = gl_cliente.nombre[j];
-		temp_cliente.ident[j-des] = gl_cliente.ident[j];
+		temp_cliente.cell[j-des] = gl_cliente.cell[j];
 
 		//Array dobles -------------------------
 		temp_cliente.desc[j-des] = gl_cliente.desc[j];

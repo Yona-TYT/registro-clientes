@@ -299,7 +299,7 @@ function reg_cliente() {
 	this.fechalist = new Array(); 		//Lista de fechas para el historial
 
 	this.nombre = new Array();			//Nombre de cada Cliente
-	this.ident = new Array();			//Documento identidad cada cliente
+	this.cell = new Array();			//Documento identidad cada cliente
 	this.mail = new Array();			//Correo electronico opcional
 	this.monto_totl = new Array();		//Monoto total de cada cliente
 
