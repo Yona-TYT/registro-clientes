@@ -21,8 +21,14 @@ function pagos_main(){
 	input_cell.addEventListener("input", function(e) {
 		input_search_unselec(e, gl_cliente.cell);//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
 	});
+
+	var time_cell;		// = setInterval(cambio_valor, 1000);
 	input_cell.addEventListener("click", function(e) {
-		e.target.setAttribute("type", "text");
+		time_cell = setInterval(function() {
+			input_cell.setAttribute("type", "text");
+			clearInterval(time_cell);
+		}, 100);
+		
 		el_selec("input_cell_reg");
 
 	});
@@ -155,8 +161,6 @@ function add_service(){
 
 
 function create_service_list(){
-	var secc_cc = document.getElementById("detalles_cc");
-	secc_cc.innerHTML = "";
 	var secc_reg = document.getElementById("registroactual");
 	secc_reg.innerHTML = "";
 
