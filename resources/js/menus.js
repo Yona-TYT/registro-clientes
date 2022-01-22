@@ -5,8 +5,6 @@ function menu_main(){
 
 }
 
-
-
 function mostrar_lista_menu(){
 	var lista = document.getElementById("menulist");
 	var class_name = lista.className;
@@ -197,8 +195,8 @@ function el_unselec(){
 
 }
 
-//Configura inputs para las gestiones de listas
-function set_input_edit(name, index){
+//Configura inputs para las gestiones de listas --------------------------------------------
+function set_input_edit_tx(name, index){
 	input =	document.createElement("input");
 	input.setAttribute("type", "text");
 	input.setAttribute("class","mask_style");
@@ -210,6 +208,19 @@ function set_input_edit(name, index){
 
 }
 
+
+function set_input_edit_nr(name, index){
+	input =	document.createElement("input");
+	input.setAttribute("type", "number");
+	input.setAttribute("class","input_desc_style");
+	input.style.width = "250px";
+	input.setAttribute("onclick", name+"("+index+");");
+	input.setAttribute("onkeyup", name+"("+index+");");
+	input.setAttribute("onchange", name+"("+index+");");
+	return input;
+
+}
+//----------------------------------------------------------------------------------------------------
 
 
 

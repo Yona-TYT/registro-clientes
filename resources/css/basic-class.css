@@ -292,6 +292,25 @@
 	overflow: hidden;
 
 }
+.input_style_all{
+	text-align: center;
+	font-weight: bold;
+	font-size:var(--siz-text);
+
+	color: #ffffff;
+	width: 100%;
+	height: 20px;
+
+	background: rgba(55, 64, 145, 0.4);
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-user-select: none;
+
+}
 .input_style_edicion_td{
 	text-align: center;
 	font-weight: bold;

@@ -263,10 +263,9 @@ function create_table_clientes(){
 				input.setAttribute("placeholder", "Ingrese Valor");
 
 				//Cuadro De nombres
-				if (siz_c==0 || siz_c==2){
+				if (siz_c==0) {
 					input.setAttribute("onselect", "el_unselec();");
 					input.setAttribute("class","input_style_td");
-					input.setAttribute("class","input_style_edicion_td");
 					input.setAttribute("type", "text");
 					celda.appendChild(input);
 					input.setAttribute("onFocus", "ocultar_input();");
@@ -282,6 +281,15 @@ function create_table_clientes(){
 					input.setAttribute("ondblclick","el_selec_act();");
 					celda.appendChild(input);
 				}
+				//Cuadro De Correo
+				if (siz_c==2){
+					input.setAttribute("onselect", "el_unselec();");
+					input.setAttribute("class","input_style_all");
+					input.setAttribute("type", "text");
+					celda.appendChild(input);
+					input.setAttribute("onFocus", "ocultar_input();");
+				}
+
 				if(siz_c==3){
 					celda.setAttribute("class", "button_style_r");
 					var button = document.createElement("button");

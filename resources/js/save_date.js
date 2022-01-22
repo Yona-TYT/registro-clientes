@@ -160,7 +160,7 @@ function obtener_cuentas(evento) {
 
 //Manejo de datos para los Clientes-----------------------------------------
 function mostrar_clientes(clave) {
-console.log("Clave cliente: "+clave+"");
+	//console.log("Clave cliente: "+clave+"");
 	var transaccion = bd.transaction(["clientes"]);
 	var almacen = transaccion.objectStore("clientes");
 	var solicitud = almacen.get(clave);

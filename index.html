@@ -85,22 +85,20 @@
 					Impor./Expor Datos
 				</div>
 			</div>
-		<! ---------------- Seccion Siempre Visible ------------------>
+		<! ---------------- Seccion Visibilidad inteligente------------------>
 		<section class="label_style" id="seccion_fija">
 			<div class="cajas_style">Buscara Servicios: 
-				<input class="mask_style" type="search" id="buscar_cc" placeholder="Ingrese Nombre de Servicio" list="listserv">
+				<input class="mask_style" type="search" id="buscar_service_reg" placeholder="Ingrese Nombre de Servicio" list="listserv">
 			</div>
 		</section>
 		<! ---------------- Seccion1 Panel Registo ------------------>
-
 		<section class="label_style" id="seccion1">
 			<section class="label_style" id="sect_rv"></section>
-			<section class="element_style_hidden" id="detalles_cc"></section>
 			<div class="cajas_style">Ingrese Telefono:
-				<input class="input_style_td" type="number" id="input_monto_pg"   placeholder="Ingrese Nr. Telefono de Cliente">		
+				<input class="input_style_td" type="number" id="input_cell_reg"   placeholder="Ingrese Nr. Telefono de Cliente" list="listclcell">		
 			</div>
 			<div class="cajas_style">Ingrese Nombre:
-				<input class="mask_style" type="text" id="input_nombre_pg" placeholder="Ingrese Nombre de Cliente" list="listcliente">
+				<input class="mask_style" type="text" id="input_name_reg" placeholder="Ingrese Nombre de Cliente" list="listcliente">
 			</div>
 			<div class="cajas_style">Seleccione Vehiculo:
 				<select class="mask_style" id="selc_vehic" onchange = "">
@@ -114,6 +112,7 @@
 			</div>
 			<section class="label_style" id="registroactual"></section>
 			<datalist id="listcliente"></datalist>
+			<datalist id="listclcell"></datalist>
 		</section>
 		<! ------- Seccion2 Gestion Clientes ------------- >
 		<section class="label_style" id="seccion2">

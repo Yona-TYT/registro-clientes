@@ -2,33 +2,53 @@ var gl_cliente = new reg_cliente();
 var gl_curr_cuenta = false;
 function pagos_main(){
 	//Buscador para las cuentas
-	var input_cuenta = document.getElementById("buscar_cc");
+	var input_cuenta = document.getElementById("buscar_service_reg");
 	input_cuenta.value = "";
 	input_cuenta.addEventListener("input", function(){buscar_lista_cuenta();});
-	input_cuenta.addEventListener("focus", function(){el_selec("buscar_cc");});
-	input_cuenta.addEventListener("dblclick", function(){el_selec("buscar_cc");});
+	input_cuenta.addEventListener("focus", function(){el_selec("buscar_service_reg");});
+	input_cuenta.addEventListener("dblclick", function(){el_selec("buscar_service_reg");});
 
 	//Buscador para los clientes
-	var input_cliente = document.getElementById("input_nombre_pg");
+	var input_cliente = document.getElementById("input_name_reg");
 	input_cliente.addEventListener("input", function(e) {
-		var elm = e.target;
-		var text = elm.value.toLowerCase();
-		for (var j = 0; j < gl_cliente.indx_a; j++) {
-			var nombre = gl_cliente.cliente[j];
-			if (nombre!=null) nombre = nombre.toLowerCase();
-			else continue;
-
-			var test = nombre.search(new RegExp("(^)" + text + "($)"));
-			//console.log("Test: "+test)
-			if( test != -1){
-				el_unselec();
-			}
-		}
+		input_search_unselec(e, gl_cliente.nombre);//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
 	});
-	input_cliente.addEventListener("focus", function(){el_selec("input_nombre_pg");});
-	input_cliente.addEventListener("dblclick", function(){el_selec("input_nombre_pg");});
-}
+	input_cliente.addEventListener("focus", function(){el_selec("input_name_reg");});
+	input_cliente.addEventListener("dblclick", function(){el_selec("input_name_reg");});
 
+	//Buscador para los numeros telefonicos
+	var input_cell = document.getElementById("input_cell_reg");
+	input_cell.addEventListener("input", function(e) {
+		input_search_unselec(e, gl_cliente.cell);//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
+	});
+	input_cell.addEventListener("click", function(e) {
+		e.target.setAttribute("type", "text");
+		el_selec("input_cell_reg");
+
+	});
+	input_cell.addEventListener("blur", function(e) {
+		e.target.value = remover_all_simb(e.target.value);
+		e.target.setAttribute("type", "number");
+	});
+}
+function input_search_unselec(e, list){
+	var elm = e.target;
+	var text = elm.value.toLowerCase();
+	for (var j = 0; j < list.length; j++) {
+		var curr_text = list[j];
+		if (curr_text!=null) curr_text = (""+curr_text+"").toLowerCase();
+		//else continue;
+
+		var test = curr_text.search(new RegExp("(^)" + text + "($)"));
+		//console.log(+j+" :: tx_a: "+text+" tx_b:"+curr_text)
+		//console.log("Test: "+test)
+		if( test != -1){
+			el_unselec();
+			return j;
+		}
+	}
+	return false;
+}
 var gl_bus_sw = true;
 
 function buscar_lista_cuenta()
@@ -37,7 +57,7 @@ function buscar_lista_cuenta()
 	gl_captures = new Array();
 	gl_capt_id = new Array();
 
-	var input_serv = document.getElementById("buscar_cc");
+	var input_serv = document.getElementById("buscar_service_reg");
 	var text = input_serv.value;
 	text = text.toLowerCase();
 	reset_inputs_pagos();
@@ -195,7 +215,7 @@ function button_quit_service(index) {
 function save_inputs_cliente(){
 	var gen_bs = gl_general.gen_bs;
 	var mask = document.getElementById("text_mask_monto_pg");
-	var ident = document.getElementById("input_monto_pg");
+	var ident = document.getElementById("input_cell_reg");
 
 	mask.value = get_mask_int_a(ident.value);
 	
@@ -215,12 +235,12 @@ var gl_hora = new Array();
 function button_reg_pago(){
 	if(!gl_curr_cuenta) return alert("Primero Debe Elejir una Cuenta!.");
 	var gen_bs = gl_general.gen_bs;
-	var nombre = document.getElementById("input_nombre_pg");
+	var nombre = document.getElementById("input_name_reg");
 	var inp_desc = document.getElementById("input_desc_pg");
 
 	var vl_nombre = nombre.value;
 	var mask = document.getElementById("text_mask_monto_pg");
-	var monto = document.getElementById("input_monto_pg");
+	var monto = document.getElementById("input_cell_reg");
 
 	var monto_a = gl_general.temp_monto_dol;
 	var monto_b = gl_general.temp_monto_bs;

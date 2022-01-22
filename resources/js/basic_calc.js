@@ -78,6 +78,31 @@ function get_mask_int_b(simb,numer){
 	return addCommas(numer,simb);
 }
 
+function get_mask_cell(numer){
+	numer = remover_all_simb(numer);
+	var USNumber = numer.match(/(\d{3})(\d{3})(\d{4})/);
+	if(USNumber)
+		USNumber = "(" + USNumber[1] + ") " + USNumber[2] + "-" + USNumber[3];
+	
+	else USNumber = numer;
+
+	return USNumber;
+}
+
+function remover_all_simb(numer){
+	return (""+numer+"").replace(/[^0-9]/gi, '');
+}
+
+
+function is_correct_cell(numer){
+
+	var USNumber = (""+numer+"").match(/(\d{3})(\d{3})(\d{4})/);
+	if(USNumber)
+		return true;
+	
+	else return false;
+}
+
 function get_colum_nr(num, tabble_siz, j){
 	return j+(tabble_siz*j)-num;
 }
@@ -86,5 +111,12 @@ function get_fila_nr(num, tabble_siz, i){
 	var resusl = ((num)/(tabble_siz))-(2/tabble_siz);
 	return resusl;
 }
+
+
+
+
+
+
+
 
 

@@ -7,32 +7,17 @@ function clientes_main(sw = true){
 	var data_lista = document.getElementById("listcliente");
 	data_lista.innerHTML = "";
 
-	console.log(" Test: "+gl_cliente.cell.length + " :: " );
+	var data_list_cell = document.getElementById("listclcell");
+	data_list_cell.innerHTML = "";
+
+	//console.log(" Test: "+gl_cliente.cell.length + " :: " );
 	for (var j = 0; j<gl_cliente.cell.length; j++) {
 		if (sw) mostrar_gcl(j);
-		data_lista.innerHTML += "<option value='"+gl_cliente.nombre[j]+" "+gl_cliente.cell[j]+"'>";
+		data_lista.innerHTML += "<option value='"+gl_cliente.nombre[j]+"'>";
+		data_list_cell.innerHTML += "<option value='"+get_mask_cell(gl_cliente.cell[j])+" - "+gl_cliente.nombre[j]+"'>";
 	}
 }
 
-function save_inputs_cl(){
-	var gen_bs = document.getElementById("input_gnbs_cc");
-	var mask = document.getElementById("text_mask_gnbs_cc");
-
-	var genbs_rp = document.getElementById("input_gnbs");
-	var mask_rp = document.getElementById("text_mask_gnbs");
-
-	var vl_bs = gen_bs.value;
-	genbs_rp.value = vl_bs;
-
-	gl_general.gen_bs = parseFloat(vl_bs)? parseFloat(vl_bs).toFixed(2) : parseFloat(0).toFixed(2);
-	agregar_gene_datos(gl_general);								//Se guardan los datos Generales
-
-	var vl_mask = get_mask(vl_bs,"Bs");
-	mask.value = vl_mask;
-	mask_rp.value = vl_mask;
-
-	get_input_value_rc()
-}
 
 // Se obtienen los valores para registrar clientes desde la tabla
 function get_input_value_cl(){
@@ -62,7 +47,8 @@ function guardar_cl(){
 	}
 		console.log(" Test:  :: " + gl_cliente.cell.length );
 	var result = false;
-	var cell_val = parseInt(cell.value)?  parseInt(cell.value) : 0 ;
+	var cell_val = remover_all_simb(cell.value);
+	cell_val = parseInt(cell.value)?  parseInt(cell.value) : 0 ;
 	for (var j = 0; j<gl_cliente.cell.length && cell_val != ""; j++) {
 		var save_nr = gl_cliente.cell[j];
 		if (save_nr!="") save_nr = parseInt(save_nr);
@@ -79,7 +65,7 @@ function guardar_cl(){
 
 		gl_cliente.nombre.push(nombre.value);
 		gl_cliente.cell.push(cell_val);
-		//gl_cliente.mail.push(mail.value?mail.value:"Sin Correo Electronico");
+		gl_cliente.mail.push(mail.value?mail.value:"Sin Correo Electronico");
  		agregar_cliente(gl_cliente, 0);				//Se guardan la informacion de Clientes
 
 		nombre.value = "";
@@ -92,28 +78,50 @@ function guardar_cl(){
 }
 
 function mostrar_gcl(index){
-	var gen_bs = gl_general.gen_bs;
 	var secc_gcl = document.getElementById("gestioncl");
 	var cliente = gl_cliente.nombre[index];
+	var cell = gl_cliente.cell[index];
+	var mail = gl_cliente.mail[index];
 
-	var input_cl =	set_input_edit("chg_name_vle", index);
-	input_cl.setAttribute("value",cliente);
-	input_cl.setAttribute("id", "input_gclx"+index);
+	var input_name = set_input_edit_tx("chg_name_vle_cl", index);
+	input_name.setAttribute("value",cliente);
+	input_name.setAttribute("id", "input_name_cl"+index);
+
+	var input_cell = set_input_edit_tx("chg_cell_vle_cl", index);
+	input_cell.setAttribute("value",cell);
+	input_cell.setAttribute("id", "input_cell_cl"+index);
+
+	var input_mail = set_input_edit_tx("chg_mail_vle_cl", index);
+	input_mail.setAttribute("value",mail);
+	input_mail.setAttribute("id", "input_mail_cl"+index);
 
 	var check = "<input class='' type='checkbox' id='check_gclx"+index+"' onchange='ocultar_gclx("+index+")'/>";
 	var buttq = "<button type='button' id='butt_gclx"+index+"' class='element_style_hidden' onclick='button_quit_gcl("+index+");'>X</button>";
 
 	var monto_total = gl_cliente.monto_totl[index];
 
-	secc_gcl.innerHTML += "<div class='div_list_style' id='divgcl"+index+"'>"+buttq+" Nombre: "+ input_cl.outerHTML + " <div class='total_style'>Total: "+get_mask(monto_total,"$")+"&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp Quitar:"+check+"</div> </div>";
+	secc_gcl.innerHTML += "<div class='div_list_style' id='divgcl"+index+"'><div> Nombre:&nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp "+ input_name.outerHTML + "</div> <div>Tlf.: &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp"+input_cell.outerHTML+" </div> <div> Email:&nbsp&nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp"+input_mail.outerHTML+" </div> <div class='total_style'>"+buttq+"&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp Quitar:"+check+"</div> </div>";
+
 }
 
-function chg_name_vle(index){
-	var input = document.getElementById("input_gclx"+index);
-
+function chg_name_vle_cl(index){
+	var input = document.getElementById("input_name_cl"+index);
 	gl_cliente.nombre[index] = input.value;
+ 	agregar_cliente(gl_cliente, 0);								//Se guardan la informacion de Clientes
+	clientes_main(false);										//Se crean las listas de clientes
+}
 
- 	agregar_cliente(gl_cliente, 0);				//Se guardan la informacion de Clientes
+function chg_cell_vle_cl(index){
+	var input = document.getElementById("input_cell_cl"+index);
+	gl_cliente.cell[index] = input.value;
+ 	agregar_cliente(gl_cliente, 0);								//Se guardan la informacion de Clientes
+	clientes_main(false);										//Se crean las listas de clientes
+}
+
+function chg_mail_vle_cl(index){
+	var input = document.getElementById("input_mail_cl"+index);
+	gl_cliente.mail[index] = input.value;
+ 	agregar_cliente(gl_cliente, 0);								//Se guardan la informacion de Clientes
 	clientes_main(false);										//Se crean las listas de clientes
 }
 

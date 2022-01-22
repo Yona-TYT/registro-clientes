@@ -8,13 +8,13 @@ function servicios_main(sw = true){
 	var data_lista = document.getElementById("listserv");
 	data_lista.innerHTML = "";
 
-	console.log(" Test: "+gl_servicio.nombre.length + " :: " );
+	//console.log(" Test: "+gl_servicio.nombre.length + " :: " );
 	for (var j = 0; j<gl_servicio.nombre.length; j++) {
 		if (sw) mostrar_gsr(j);
 		data_lista.innerHTML += "<option value='"+gl_servicio.nombre[j]+"'>";
 	}
-
 }
+
 function save_inputs_cuentas(){
 	var gen_bs = document.getElementById("input_gnbs_cc");
 	var mask = document.getElementById("text_mask_gnbs_cc");
@@ -75,18 +75,14 @@ function guardar_servicio(){
 	}
 	if(result) return alert("El Nombre del Servicio ya existe!.");
 
-
 	if(costo.value != "" && nombre.value != "" && desc.value != ""){
 
 		gl_servicio.nombre.push(nombre.value);
 		gl_servicio.desc.push(desc.value);
 		gl_servicio.costo.push(costo.value);
 
-
 		gl_servicio.clave = 0;
 		agregar_cuenta(gl_servicio, 0);				//Se guardan la informacion de servicios
-
-		crear_datalist_cc();
 
 		nombre.value = "";
 		desc.value = "";
@@ -98,37 +94,35 @@ function guardar_servicio(){
 	else alert("No se permiten valores Vacios!.");
 }
 
-function crear_datalist_cc() {
-	var data_lista = document.getElementById("listserv");
-	data_lista.innerHTML = "";
-	//console.log("Finished:"+gl_general.cu_save_id)
-	for (var j = 0; j <gl_servicio.nombre.length; j++) {
-		data_lista.innerHTML += "<option value='"+gl_servicio.nombre[j]+"'>";
-	}
-}
-
 function mostrar_gsr(index){
-	var gen_bs = gl_general.gen_bs;
 	var secc_gsr = document.getElementById("gestionrs");
 	var servicio = gl_servicio.nombre[index];
-
-	var input_rs =	set_input_edit("chg_name_vle_sr", index);
-	input_rs.setAttribute("value",servicio);
-	input_rs.setAttribute("id", "input_grsx"+index);
-
-
-	var check = "<input class='' type='checkbox' id='check_gclx"+index+"' onchange='ocultar_gclx("+index+")'/>";
-	var buttq = "<button type='button' id='butt_gclx"+index+"' class='element_style_hidden' onclick='button_quit_gsr("+index+");'>X</button>";
-
 	var costo = gl_servicio.costo[index];
+	var desc = gl_servicio.desc[index];
 
-	secc_gsr.innerHTML += "<div class='div_list_style' id='divgcl"+index+"'>"+buttq+" Nombre: "+ input_rs.outerHTML + " <div class='total_style'>Costo: "+get_mask(costo,"$")+"&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp Quitar:"+check+"</div> </div>";
+	//Entrada para el nombre
+	var input_name =	set_input_edit_tx("chg_name_vle_sr", index);
+	input_name.setAttribute("value",servicio);
+	input_name.setAttribute("id", "input_name_rs"+index);
+
+	//Entrada para descricion
+	var input_desc = set_input_edit_tx("chg_desc_vle_sr", index);
+	input_desc.setAttribute("value",desc);
+	input_desc.setAttribute("id", "input_desc_rs"+index);
+
+	//Entrada para el costo
+	var input_costo = set_input_edit_nr("chg_costo_vle_sr", index);
+	input_costo.setAttribute("value",costo);
+	input_costo.setAttribute("id", "input_costo_rs"+index);
+
+	var check = "<input class='' type='checkbox' id='check_gsrx"+index+"' onchange='ocultar_gsrx("+index+")'/>";
+	var buttq = "<button type='button' id='butt_gsrx"+index+"' class='element_style_hidden' onclick='button_quit_gsr("+index+");'>X</button>";
+
+	secc_gsr.innerHTML += "<div class='div_list_style' id='divgrs"+index+"'><div> Nombre: &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp "+ input_name.outerHTML + "</div> <div>Desc.: &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp"+input_desc.outerHTML+" </div> <div> Costo: &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp"+input_costo.outerHTML+" </div> <div class='total_style'>"+buttq+"&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp Quitar:"+check+"</div> </div>";
 }
 
-
-
 function chg_name_vle_sr(index){
-	var input = document.getElementById("input_grsx"+index);
+	var input = document.getElementById("input_name_rs"+index);
 
 	gl_servicio.nombre[index] = input.value;
 
@@ -136,6 +130,23 @@ function chg_name_vle_sr(index){
 	servicios_main(false);							//Se crean las listas de servicios
 }
 
+function chg_desc_vle_sr(index){
+	var input = document.getElementById("input_desc_rs"+index);
+
+	gl_servicio.desc[index] = input.value;
+
+	agregar_cuenta(gl_servicio, 0);					//Se guardan la informacion de servicios
+	servicios_main(false);							//Se crean las listas de servicios
+}
+
+function chg_costo_vle_sr(index){
+	var input = document.getElementById("input_costo_rs"+index);
+
+	gl_servicio.costo[index] = input.value;
+
+	agregar_cuenta(gl_servicio, 0);					//Se guardan la informacion de servicios
+	servicios_main(false);							//Se crean las listas de servicios
+}
 
 function ocultar_gsrx(index) {
 	var check = document.getElementById("check_gsrx"+index).checked;
@@ -149,12 +160,14 @@ function button_quit_gsr(index) {
 	var butt = document.activeElement;
 	butt.setAttribute("class","element_style_hidden");
 	
-	gl_general.list_nombre.splice(index, 1);
-	gl_general.list_costo.splice(index, 1);
-	gl_general.list_nr.splice(index, 1);
+	gl_servicio.nombre.splice(index, 1);
+	gl_servicio.desc.splice(index, 1);
+	gl_servicio.costo.splice(index, 1);
+
+	gl_servicio.clave = 0;
+	agregar_cuenta(gl_servicio, 0);				//Se guardan la informacion de servicios
 
 	servicios_main();							//Se crean las listas de servicios
 }
-
 
 
