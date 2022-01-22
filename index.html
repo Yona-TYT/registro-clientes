@@ -94,25 +94,43 @@
 		<! ---------------- Seccion1 Panel Registo ------------------>
 		<section class="label_style" id="seccion1">
 			<section class="label_style" id="sect_rv"></section>
-			<div class="cajas_style">Ingrese Telefono:
-				<input class="input_style_td" type="text" inputmode="numeric" id="input_cell_reg"   placeholder="Ingrese Nr. Telefono de Cliente" list="listclcell">		
-			</div>
-			<div class="cajas_style">Ingrese Nombre:
-				<input class="mask_style" type="text" id="input_name_reg" placeholder="Ingrese Nombre de Cliente" list="listcliente">
-			</div>
-			<div class="cajas_style">Seleccione Vehiculo:
-				<select class="mask_style" id="selc_vehic" onchange = "">
-					<option  value="0">Vehiculo 1</option>
-					<option  value="1">Vehiculo 2</option>
-					<option  value="3">Vehiculo 3</option>
-				</select>
-			</div>
-			<div class="cajas_style">
-				<button class="mask_style" type="button" id="butt_savepg" onclick="button_reg_pago();">Registrar</button>
-			</div>
+			<section class="label_style" id="sec_cliente">
+				<div class="cajas_style">Ingrese Telefono:
+					<input class="input_style_td" type="text" inputmode="tel" id="input_cell_reg"   placeholder="Ingrese Nr. Telefono de Cliente" list="listclcell">		
+				</div>
+				<div class="cajas_style">Ingrese Nombre:
+					<input class="mask_style" type="text" id="input_name_reg" placeholder="Ingrese Nombre de Cliente" list="listcliente">
+				</div>
+				<div class="cajas_style">Seleccione Vehiculo:
+					<select class="mask_style" id="selc_vehic" onchange = "">
+						<option  value='0'>Vacio</option>
+						<option  value='1'>Nuevo Vehiculo</option>
+						<option  value='2'>Vehiculo 1</option>
+					</select>
+				</div>
+				<div class="cajas_style">
+					<button class="mask_style" type="button" id="butt_savepg" onclick="button_datos_reg();">Registrar</button>
+				</div>
+			</section>
+			<section class="label_style" id="sec_veh">
+				<div class="cajas_style">Marca y Modeo:
+					<input class="mask_style" type="text" id="input_model_veh" placeholder="Ingrese Marca y Modelo" >
+				</div>
+				<div class="cajas_style">Serial o Placa:
+					<input class="mask_style" type="text" id="input_id_veh" placeholder="Ingrese Serial o Placa" >
+				</div>
+				<div class="cajas_style">Color:
+					<input class="mask_style" type="text" id="input_color_veh" placeholder="Ingrese Color" list="listcolor">
+				</div>
+				<div class="cajas_style">
+					<button class="mask_style" type="button" id="butt_add_veh" onclick="button_add_veh();">Aceptar</button>
+				</div>
+			</section>
+
 			<section class="label_style" id="registroactual"></section>
 			<datalist id="listcliente"></datalist>
 			<datalist id="listclcell"></datalist>
+			<datalist id="listcolor"></datalist>
 		</section>
 		<! ------- Seccion2 Gestion Clientes ------------- >
 		<section class="label_style" id="seccion2">

@@ -1,30 +1,132 @@
 var gl_cliente = new reg_cliente();
 var gl_curr_cuenta = false;
 function pagos_main(){
-	//Buscador para las cuentas
+	//Buscador para los servicios	---------------------------------------------------------------------------------------------------------
 	var input_cuenta = document.getElementById("buscar_service_reg");
 	input_cuenta.value = "";
-	input_cuenta.addEventListener("input", function(){buscar_lista_cuenta();});
+	input_cuenta.addEventListener("input", function(e) {
+		var j = input_search_unselec(e, gl_servicio.nombre);	//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
+		if (j!==false) {
+			gl_curr_cuenta = true;
+		 	start_inputs_reg(j);
+		}
+	});
 	input_cuenta.addEventListener("focus", function(){el_selec("buscar_service_reg");});
 	input_cuenta.addEventListener("dblclick", function(){el_selec("buscar_service_reg");});
+	//---------------------------------------------------------------------------------------------------------
 
-	//Buscador para los clientes
+	// Inputs de datos de Clientes =======================================================================================================
 	var input_cliente = document.getElementById("input_name_reg");
+	var input_cell = document.getElementById("input_cell_reg");
+
+	//Buscador para los numeros telefonicos
 	input_cliente.addEventListener("input", function(e) {
-		input_search_unselec(e, gl_cliente.nombre);//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
+		var j = input_search_unselec(e, gl_cliente.nombre);	//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
+		if (j!==false) input_cell.value = gl_cliente.cell[j];
 	});
 	input_cliente.addEventListener("focus", function(){el_selec("input_name_reg");});
 	input_cliente.addEventListener("dblclick", function(){el_selec("input_name_reg");});
+	//---------------------------------------------------------------------------------------------------------
 
-	//Buscador para los numeros telefonicos
-	var input_cell = document.getElementById("input_cell_reg");
+	//Buscador para los numeros telefonicos	----------------------------------------------------------------------------------------------
 	input_cell.addEventListener("input", function(e) {
-		input_search_unselec(e, gl_cliente.cell);//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
 		e.target.value = remover_all_simb(e.target.value);
+		var j = input_search_unselec(e, gl_cliente.cell);	//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
+		if (j!==false) input_cliente.value = gl_cliente.nombre[j];
+
 	});
 	input_cell.addEventListener("focus", function(){el_selec("input_cell_reg");});
 	input_cell.addEventListener("dblclick", function(){el_selec("input_cell_reg");});
+	//---------------------------------------------------------------------------------------------------------
+	//====================================================================================================================================
+
+	// Selector para agg vehiculos =======================================================================================================
+	var selec_veh = document.getElementById("selc_vehic");
+
+	selec_veh.addEventListener("change", function(e) {
+		chag_selec_veh();
+	});
+
+	preloder_selec_veh();
+	//=====================================================================================================================================
+
+	// Inputs de datos del vehiculo =======================================================================================================
+	var input_model = document.getElementById("input_model_veh");
+	var input_ide = document.getElementById("input_id_veh");
+	var input_color = document.getElementById("input_color_veh");
+
+	//Entradas para modelo y marca	---------------------------------------------------------------------------
+	input_model.addEventListener("input", function(e) {
+		//gl_general.temp_model = e.target.value;
+	});
+	input_model.addEventListener("focus", function(){el_selec("input_model_veh");});
+	input_model.addEventListener("dblclick", function(){el_selec("input_model_veh");});
+	//---------------------------------------------------------------------------------------------------------
+
+	//Entradas para serial o placa	---------------------------------------------------------------------------
+	input_ide.addEventListener("input", function(e) {
+		//gl_general.temp_id = e.target.value;
+	});
+	input_ide.addEventListener("focus", function(){el_selec("input_id_veh");});
+	input_ide.addEventListener("dblclick", function(){el_selec("input_id_veh");});
+	//---------------------------------------------------------------------------------------------------------
+
+	//Entradas para el color	-------------------------------------------------------------------------------
+	input_color.addEventListener("input", function(e) {
+		//gl_general.temp_color = e.target.value;
+	});
+	input_color.addEventListener("focus", function(){el_selec("input_color_veh");});
+	input_color.addEventListener("dblclick", function(){el_selec("input_color_veh");});
+	//---------------------------------------------------------------------------------------------------------
+
+	//=====================================================================================================================================
+
 }
+
+function preloder_selec_veh(){
+	var selec_veh = document.getElementById("selc_vehic");
+	selec_veh.options[0].selected = true;
+
+	// Vehiculos
+	var sec_veh = document.getElementById("sec_veh");
+	sec_veh.setAttribute("class","element_style_hidden");
+}
+
+function chag_selec_veh(){
+	var selec_veh = document.getElementById("selc_vehic");
+	var opt = selec_veh.options[selec_veh.selectedIndex];
+
+	// Clientes
+	var sec_cl = document.getElementById("sec_cliente");
+
+	// Vehiculos
+	var sec_veh = document.getElementById("sec_veh");
+
+	if(opt.value == 1){
+		sec_veh.setAttribute("class","label_style");
+		sec_cl.setAttribute("class","element_style_hidden");
+
+	}
+	else {
+		sec_cl.setAttribute("class","label_style");
+		sec_veh.setAttribute("class","element_style_hidden");
+	}
+}
+function button_add_veh(){
+	var selec_veh = document.getElementById("selc_vehic");
+
+	// Clientes
+	var sec_cl = document.getElementById("sec_cliente");
+
+	// Vehiculos
+	var sec_veh = document.getElementById("sec_veh");
+
+	//console.log("Test: "+gl_general.temp_model)
+	sec_cl.setAttribute("class","label_style");
+	sec_veh.setAttribute("class","element_style_hidden");	
+}
+
+
 function input_search_unselec(e, list){
 	var elm = e.target;
 	var text = elm.value.toLowerCase();
@@ -34,63 +136,14 @@ function input_search_unselec(e, list){
 		//else continue;
 
 		var test = curr_text.search(new RegExp("(^)" + text + "($)"));
-		//console.log(+j+" :: tx_a: "+text+" tx_b:"+curr_text)
-		//console.log("Test: "+test)
+		//console.log(+j+" :: tx_a: "+text+" tx_b:"+curr_text+" ::"+test)
+
 		if( test != -1){
 			el_unselec();
 			return j;
 		}
 	}
 	return false;
-}
-var gl_bus_sw = true;
-
-function buscar_lista_cuenta()
-{
-	//Limpia los captures
-	gl_captures = new Array();
-	gl_capt_id = new Array();
-
-	var input_serv = document.getElementById("buscar_service_reg");
-	var text = input_serv.value;
-	text = text.toLowerCase();
-	reset_inputs_pagos();
-	var result = false;
-
-	var check = document.getElementById("captcheck");
-	check.checked = false;
-
-	gl_data_count = 1;
-
-	//console.log("Finished: "+gl_curr_cuenta);
-	for (var j = 0; j < gl_servicio.nombre.length; j++) {
-		var nombre = gl_servicio.nombre[j];
-		if (nombre!=null) nombre = nombre.toLowerCase();
-		else continue;
-		result = nombre.includes(text);
-
-		if(result){
-			var test = nombre.search(new RegExp("(^)" + text + "($)"));
-			if( test != -1){
-				if(gl_bus_sw){
-					el_unselec();
-					gl_bus_sw = false;
-				}
-			}
-			else {
-				gl_bus_sw = true;
-			}
-			//console.log("Text: "+test);
-			gl_curr_cuenta = true;
-			mostrar_cuentas(0);
-			mostrar_clientes(0);
-			start_inputs_pagos(j);
-
-			// ---------------------- test ---------------------
-			clientes_main();							//Se crean las listas de clientes
-			break;
-		}
-	}
 }
 
 function reset_inputs_pagos() {
@@ -103,7 +156,7 @@ function reset_inputs_pagos() {
 	input_nr.value = 1;
 }
 
-function start_inputs_pagos(j) {
+function start_inputs_reg(j) {
 
 	gl_general.temp_nombre =  gl_servicio.nombre[j];
 	gl_general.temp_desc =  gl_servicio.desc[j];
@@ -127,10 +180,6 @@ function start_inputs_pagos(j) {
 	//----------------------------------------------------------------
 }
 
-
-
-
-
 function add_service(){
 	if(gl_curr_cuenta){
 		var input_nr = document.getElementById("pginput"+1+""+2);
@@ -150,14 +199,8 @@ function create_service_list(){
 	var secc_reg = document.getElementById("registroactual");
 	secc_reg.innerHTML = "";
 
-
-	//console.log("Div Ind a "+gl_cliente.indx_a+" Ind b "+gl_cliente.indx_b[0]);
 	gl_servicio.monto_pagado = 0;
 	var gen_bs = gl_general.gen_bs;
-
-	//gl_capt_id = new Array();				//Limpia la lista de claves para los captures
-
-	//gl_hist_pg = new reg_cliente();			//Inicia la listas para el historial
 
 	if(gl_curr_cuenta ){
 		var total = 0;
@@ -168,15 +211,12 @@ function create_service_list(){
 			var nr = gl_general.list_nr[j];
 
 			var buttq = "<button type='button' id='butt_x"+j+"' class='butt_style_x' onclick='button_quit_service("+j+");'>X</button>";
-
-console.log(""+cost+"")
+			//console.log(""+cost+"")
 			total +=  (cost*nr);
 			list_tx +=  "<div class='div_list_style' id='divpg"+j+"'> "+buttq+" ["+(j+1)+"] "+ name + "  <span class='total_style'>Costo: "+get_mask(cost*nr,"$")+"</span> (nr "+nr+") </div>";
 
 		}
-
 		var total_tx =  "<div class='div_list_style' id='divpg"+j+"'>Costo Tota: "+get_mask(total,"$")+"</div>";
-
 		secc_reg.innerHTML = total_tx + list_tx;
 	}
 }
@@ -193,10 +233,7 @@ function button_quit_service(index) {
 }
 
 
-
-
-
-
+//===================================================================================================================================================
 
 
 
@@ -213,31 +250,41 @@ function save_inputs_cliente(){
 
 
 //Array doble para registrar multiples datos por cliente
-var gl_desc = new Array();
-var gl_actual_bs = new Array();
-var gl_monto_dol = new Array();
-var gl_monto_bs = new Array();
-var gl_fecha = new Array();
-var gl_hora = new Array();
+var gl_model = new Array();
+var gl_ide = new Array();
+var gl_col = new Array();
+
 //------------------------------------------------------
 
-function button_reg_pago(){
-	if(!gl_curr_cuenta) return alert("Primero Debe Elejir una Cuenta!.");
-	var gen_bs = gl_general.gen_bs;
-	var nombre = document.getElementById("input_name_reg");
-	var inp_desc = document.getElementById("input_desc_pg");
+function button_datos_reg(){
 
-	var vl_nombre = nombre.value;
-	var mask = document.getElementById("text_mask_monto_pg");
-	var monto = document.getElementById("input_cell_reg");
+	// Inputs datos Vehiculo ------------------------------------
+	var input_cliente = document.getElementById("input_name_reg");
+	var input_cell = document.getElementById("input_cell_reg");
+	var val_cl = input_cliente.value;
+	var val_cell = input_cell.value;
+	//------------------------------------------------------------
 
-	var monto_a = gl_general.temp_monto_dol;
-	var monto_b = gl_general.temp_monto_bs;
-	if (!check_text_resv(nombre.value)){
+	// Inputs datos Vehiculo -----------------------------------
+	var input_model = document.getElementById("input_model_veh");
+	var input_ide = document.getElementById("input_id_veh");
+	var input_color = document.getElementById("input_color_veh");
+	var val_mod = input_model.value;
+	var val_ide = input_ide.value;
+	var val_col = input_color.value;
+	//------------------------------------------------------------
+
+	if(val_mod == "" && val_ide =="" && val_col == "")
+		return alert("Debe agregar informacion de vehiculo!.");
+
+
+	/*if (!check_text_resv(nombre.value)){
 		nombre.value = "";
 		return null;
-	}
-	if(vl_nombre != "" && monto_a != 0 && monto_b != 0){
+	}*/
+	if(val_cl != "" && val_cell != ""){
+
+		// Gestion para fecha y hora ========================================================================
 		var hoy = new Date();
 		var curr_hora =  hoy.getHours() + ":" + hoy.getMinutes() + ":" + hoy.getSeconds();
 		var curr_fecha = hoy.getDate()+ "-" + ( hoy.getMonth() + 1 ) + "-" + hoy.getFullYear();
@@ -253,95 +300,77 @@ function button_reg_pago(){
 			gl_general.index++;
 			gl_general.fechalist[gl_general.index] = curr_fecha;
 		}
+		// =====================================================================================================
 
-		var res = cliente_check(vl_nombre);			//Compara si el nombre del cliente existe
+		var res = cell_check_cl(remover_all_simb(val_cell));			//Compara si el numero del cliente existe
 		var index_a = res.a;
 		var index_b = res.b;
 
-		gl_desc[index_b] = inp_desc.value == ""?"n/a":inp_desc.value;
-		gl_actual_bs[index_b] = gen_bs;
-		gl_monto_dol[index_b] = monto_a;
-		gl_monto_bs[index_b] = monto_b;
-		gl_fecha[index_b] = curr_fecha;
-		gl_hora[index_b] = curr_hora;
+		//Datos de vehiculos en arrays bidimencionales
+		gl_model[index_b] = val_mod;
+		gl_ide[index_b] = val_ide;
+		gl_col[index_b] = val_col;
+		gl_cliente.model[index_a] = gl_model;
+		gl_cliente.ide[index_a] = gl_ide;
+		gl_cliente.color[index_a] = gl_col;
+		//---------------------------------------------
 
-		gl_cliente.desc[index_a] = gl_desc;
-		gl_cliente.actual_bs[index_a] = gl_actual_bs;
-		gl_cliente.monto_dol[index_a] = gl_monto_dol;
-		gl_cliente.monto_bs[index_a] = gl_monto_bs;
-		gl_cliente.fecha[index_a] = gl_fecha;
-		gl_cliente.hora[index_a] = gl_hora;
+		//Datos Cliente en arrays ---------------------
+		gl_cliente.nombre[index_a] = val_cl;
+		gl_cliente.cell[index_a] = val_cell;
+		gl_cliente.mail[index_a] = "Sin Correo";
+		//---------------------------------------------
 
-		gl_cliente.cliente[index_a] = vl_nombre.toLowerCase();
-		if (gl_cliente.monto_totl[index_a]) gl_cliente.monto_totl[index_a] += monto_a;
-		else gl_cliente.monto_totl[index_a] = monto_a;
-
-		//console.log("Save Ind a "+index_a+" Monto Dol: "+monto_a+" total: "+gl_cliente.monto_totl[index_a]);
-
-		gl_cliente.start = true;									//Se marca como iniciado
-		gl_cliente.clave = gl_servicio.clave;
- 		agregar_cliente(gl_cliente, gl_servicio.clave);				//Se guardan la informacion de Clientes
+ 		agregar_cliente(gl_cliente, 0);				//Se guardan la informacion de Clientes
 		agregar_gene_datos(gl_general);
+
 		gl_servicio.hash = null;
- 		agregar_cuenta(gl_servicio, gl_servicio.clave);				//Se guardan la informacion de Cuenta
+ 		agregar_cuenta(gl_servicio, 0);				//Se guardan la informacion de Cuenta
 
-		//Tests 
-		//remove_capture(""+gl_servicio.clave+""+index_a+""+index_b+"");		//Limpia el espacio en casi de que existan captures basura
+		//Limpieza -----------------
+		input_cliente.value = "";
+		input_cell.value = "";
+		input_model.value = "";
+		input_ide.value = "";
+		input_color.value = "";
 
-		nombre.value = "";
-		inp_desc.value = "";
-		mask.value = "";
-		monto.value = "";
-		mostrar_detalles_cl();
+		gl_model = new Array();
+		gl_ide = new Array();
+		gl_col = new Array();
+		//-----------------------------------
 
-		gl_desc = new Array();
-		gl_actual_bs = new Array();
-		gl_monto_dol = new Array();
-		gl_monto_bs = new Array();
-		gl_fecha = new Array();
-		gl_hora = new Array();
+		clientes_main();							//Se crean las listas de clientes
 
 	}
 	else alert("No se permiten valores Vacios!.");
 }
 
-function cliente_check(text) {
-	text = text.toLowerCase();
+function cell_check_cl(num) {
+
 	var index = new index_resul();
-	var nomb_list = gl_cliente.cliente;
+	var nomb_list = gl_cliente.cell;
 	//nomb_list.reverse();
 	var result = false;
 	var siz = nomb_list.length;
 	index.a = siz;
 	for (var j = 0; j < siz ; j++) {
-		var name = nomb_list[j].toLowerCase();
-		result = name.includes(text);
-
-		//console.log("index a "+index.a +" buscar: "+name+" text: "+text+" res: "+result+ " siz: "+siz)
-		if(result){
+		if(num == nomb_list[j]){
+			result = true;
 			index.a = j;
-			gl_cliente.indx_b[index.a]++;
-			index.b = gl_cliente.indx_b[index.a];
-
-			gl_desc = gl_cliente.desc[index.a];
-			gl_actual_bs = gl_cliente.actual_bs[index.a];
-			gl_monto_dol = gl_cliente.monto_dol[index.a];
-			gl_monto_bs = gl_cliente.monto_bs[index.a];
-			gl_fecha = gl_cliente.fecha[index.a];
-			gl_hora = gl_cliente.hora[index.a];
+			//gl_cliente.indx_b[j]++;
+			try {
+				index.b = gl_cliente.model[j].length;
+			}
+			catch (err) {
+				console.log("Errror  Verificar esto!.");
+				break;
+			}
+			gl_model = gl_cliente.model[j];
+			gl_ide = gl_cliente.ide[j];
+			gl_color = gl_cliente.color[j];
 
 			break;
 		}
-	}
-
-	if(!result){
-		if(!gl_cliente.indx_b[index.a])	gl_cliente.indx_b[index.a] = 0;
-		gl_cliente.cliente[index.a] = text;
-		gl_cliente.indx_a++;
-		gl_cliente.indx_b[index.a] = 0;
-
-		var data_lista = document.getElementById("listcliente");
-		data_lista.innerHTML += "<option value='"+text+"'>";
 	}
 	return index;
 }
@@ -576,7 +605,7 @@ function mostrar_detalles_cl(){
 				secc_reg.innerHTML +=  "<div class='div_list_style' id='divpg"+j+"'>"+buttm+" Cliente: "+ cliente + " <div class='total_style'>Total: "+get_mask(monto_total,"$")+" / "+get_mask(monto_tot_bs,"Bs")+"&nbsp &nbsp &nbsp Quitar:"+check+"</div> "+ inside+"</div>";
 			}
 		}
-		start_inputs_pagos();
+		start_inputs_reg();
 		mostrar_detalles_cc();
 		mostrar_historial();
 		preloder_filtro_fec();

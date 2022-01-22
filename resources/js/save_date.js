@@ -234,8 +234,6 @@ function remove_capture(clave) {
 	var solicitud = almacen.delete(clave);
 }
 
-
-
 //--------------------------------------------------------------------------
 
 //Datos generales
@@ -275,16 +273,21 @@ function general_datos() {
 	this.captid = new Array();			//Guarda ids de los captures
 	this.etdcapt = new Array();			//Guarda ids de los captures
 
-	//Datos individuales para manejo temporal
+	//Trabajo en proceso
+
+	//Datos individuales para manejo temporal -----------------------------
+	//Cliente
 	this.temp_nombre = "";					//Nombre de servicio
 	this.temp_desc = "";					//Texto descritivo
 	this.temp_costo = 0;					//Costo del servicio
+	// --------------------------------------------------------------------
 
-	// Datos temporales para la lista
+	// Datos temporales para la lista -----------------------------
 	this.list_nombre = new Array();
 	this.list_desc = new Array();
 	this.list_costo = new Array();
 	this.list_nr = new Array();
+	// --------------------------------------------------------------------
 
 }
 
@@ -299,9 +302,15 @@ function reg_cliente() {
 	this.fechalist = new Array(); 		//Lista de fechas para el historial
 
 	this.nombre = new Array();			//Nombre de cada Cliente
-	this.cell = new Array();			//Documento identidad cada cliente
+	this.cell = new Array();			//Numero telefonico de cada cliente
 	this.mail = new Array();			//Correo electronico opcional
 	this.monto_totl = new Array();		//Monoto total de cada cliente
+
+	//Arrays Bidimencionales ------------------------------------------
+	this.model = new Array();			//Modelo o marca de vehiculo
+	this.ide = new Array();				//Serial o Placa de vehiculo
+	this.color = new Array();			//Color de vehiculo
+	//------------------------------------------------------------------
 
 	//Modificar estoooooooooo!.
 	this.actual_bs = new Array();		//Precio del dolara al momento de registrar
