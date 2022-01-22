@@ -30,6 +30,8 @@ function pagos_main(){
 		e.target.value = remover_all_simb(e.target.value);
 		e.target.setAttribute("type", "number");
 	});
+	input_cell.addEventListener("focus", function(){el_selec("input_cell_reg");});
+	input_cell.addEventListener("dblclick", function(){el_selec("input_cell_reg");});
 }
 function input_search_unselec(e, list){
 	var elm = e.target;
@@ -62,9 +64,6 @@ function buscar_lista_cuenta()
 	text = text.toLowerCase();
 	reset_inputs_pagos();
 	var result = false;
-
-	var secc_det = document.getElementById("detalles_cc");
-	secc_det.setAttribute("class", "element_style_hidden");
 
 	var check = document.getElementById("captcheck");
 	check.checked = false;
@@ -364,7 +363,7 @@ function index_resul() {
 
 
 function mostrar_detalles_cc(){
-	var secc_det = document.getElementById("detalles_cc");
+
 
 	var gen_bs = gl_general.gen_bs;
 	var monto_tot_bs = calc_dolar_a_bs(gl_servicio.monto_dol, gen_bs);
