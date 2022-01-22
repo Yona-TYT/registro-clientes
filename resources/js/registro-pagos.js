@@ -20,25 +20,10 @@ function pagos_main(){
 	var input_cell = document.getElementById("input_cell_reg");
 	input_cell.addEventListener("input", function(e) {
 		input_search_unselec(e, gl_cliente.cell);//Compara las cadenas, en caso de conincidir deselecci (oculta teclado)
-	});
-
-	var time_cell;		// = setInterval(cambio_valor, 1000);
-	input_cell.addEventListener("focus", function(e) {
-		time_cell = setInterval(function() {
-			input_cell.setAttribute("type", "text");
-			el_selec("input_cell_reg");
-			clearInterval(time_cell);
-		}, 100);
-		
-		el_selec("input_cell_reg");
-
-	});
-	input_cell.addEventListener("blur", function(e) {
 		e.target.value = remover_all_simb(e.target.value);
-		e.target.setAttribute("type", "number");
 	});
-	//input_cell.addEventListener("focus", function(){el_selec("input_cell_reg");});
-	//input_cell.addEventListener("dblclick", function(){el_selec("input_cell_reg");});
+	input_cell.addEventListener("focus", function(){el_selec("input_cell_reg");});
+	input_cell.addEventListener("dblclick", function(){el_selec("input_cell_reg");});
 }
 function input_search_unselec(e, list){
 	var elm = e.target;
